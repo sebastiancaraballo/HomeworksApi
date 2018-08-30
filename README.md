@@ -3,7 +3,7 @@
 ## Instalacion de ambiente
 
 * [.NET Core 2.1 downloads](https://www.microsoft.com/net/download/dotnet-core/2.1)
-* [Visual Code](https://code.visualstudio.com/Download)
+* [Visual Studio Code](https://code.visualstudio.com/Download)
 * [Postman](https://www.getpostman.com/apps)
 
 Commando | Resultado
