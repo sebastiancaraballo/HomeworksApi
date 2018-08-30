@@ -9,7 +9,7 @@
 Commando | Resultado
 ------------ | -------------
 dotnet new sln| Creamos solucion (solo útil para VisualStudio, cuando queremos abrir la solución y levantar los proyectos asociados)
-dotnet new webapi -au none -n "Nombre del Proyecto"| Crear un nuevo Proyecto del template WebApi (-ua none implica que el proyecto sin autentificación)
+dotnet new webapi -n "Nombre del Proyecto"| Crear un nuevo Proyecto del template WebApi
 dotnet sln add | Asociamos el proyecto creado al .sln
 dotnet new classlib -n "Nombre del Proyecto"| Crear un nueva libreria (standard)
 dotnet add "Nombre del Proyecto 1".csproj reference "Nombre del Proyecto 2".csproj| Agrega una referencia al Proyecto 1 del Proyecto 2
