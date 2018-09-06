@@ -83,14 +83,14 @@ Para esto debemos pararnos en el proyecto de Homeworks.WebApi en la consola y la
 *-p [proyecto] se coloca el proyecto donde se encuentra el db context en nuestro caso es el DataAccess*
 
 Output: Si vamos al proyecto DataAccess nos debió haber generado una carpeta llamada Migrations con la migración
-![Imagen CreateHomeworksDB]()
+![Imagen CreateHomeworksDB](https://github.com/Sactos/HomeworksApi/blob/develop/imgs/migracionCreateDB.PNG)
 
 Después de crear la migración es necesario ejecutarla para eso utilizaremos el siguiente comando:
 ```
 dotnet ef database update -p ..\Homeworks.DataAccess\
 ```
 Output:
-![Imagen UpdateHomeworksDB]()
+![Imagen UpdateHomeworksDB](https://github.com/Sactos/HomeworksApi/blob/develop/imgs/migracionUpdateDB.PNG)
 
 ## Migraciones
 Las migraciones son la manera de mantener el schema de la BD sincronizado con el Dominio, por esto cada vez que se modifica el dominio se deberá crear una migracion.
