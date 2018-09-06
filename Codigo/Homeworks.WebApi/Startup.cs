@@ -33,8 +33,12 @@ namespace Homeworks.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvc();
+            app.UseMvc(routes => {
+                routes.MapRoute(
+                    name: "Default",
+                    template: "api/{controller}/{id?}"
+                );
+            });
         }
     }
 }

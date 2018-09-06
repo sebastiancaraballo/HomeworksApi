@@ -21,7 +21,7 @@ namespace Homeworks.WebApi.Models
         {
             Id = this.Id,
             Problem = this.Problem,
-            Score = this.Score
+            Score = this.Score,
         };
 
         protected override ExerciseModel SetModel(Exercise entity)
