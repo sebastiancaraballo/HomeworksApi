@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Homeworks.BusinessLogic;
-using Homeworks.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Homeworks.BusinessLogic;
+using Homeworks.WebApi.Models;
 
 namespace Homeworks.WebApi.Controllers
 {
@@ -13,51 +13,56 @@ namespace Homeworks.WebApi.Controllers
     {
         private HomeworkLogic homeworks;
 
-        public HomeworksController() 
-        {
+        public HomeworksController() : base() {
             homeworks = new HomeworkLogic();
         }
-
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(homeworks.GetAll());
+            return Ok(HomeworkModel.ToModel(homeworks.GetAll()));
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(Guid id)
         {
             var homework = homeworks.Get(id);
             if (homework == null) {
                 return NotFound();
             }
-            return Ok(new HomeworkModel(homework));
+            return Ok(HomeworkModel.ToModel(homework));
         }
 
-        [HttpGet("{id}/Exercises")]
-        public IActionResult GetExercise(Guid id)
+        [HttpPost("{id}/Exercises", Name = "AddExercise")]
+        public IActionResult PostExercise(Guid id, [FromBody]ExerciseModel exercise)
         {
-            var homework = homeworks.Get(id);
-            if (homework == null) {
-                return NotFound();
+            var newExercise = homeworks.AddExercise(id, ExerciseModel.ToEntity(exercise));
+            if (newExercise == null) {
+                return BadRequest();
             }
-            return Ok(homework.Exercises);
+            return CreatedAtRoute("GetExercise", new { id = newExercise.Id }, ExerciseModel.ToModel(newExercise));
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]HomeworkModel homeworkModel)
+        public IActionResult Post([FromBody]HomeworkModel model)
         {
-            var homework = homeworks.Create(homeworkModel.ToEntity());
-            return Ok(homework);
+            try {
+                var homework = homeworks.Create(HomeworkModel.ToEntity(model));
+                return CreatedAtRoute("Get", new { id = homework.Id }, HomeworkModel.ToModel(homework));
+            } catch(ArgumentException e) {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody]Homework homework)
+        public IActionResult Put(Guid id, [FromBody]HomeworkModel model)
         {
-            homework = homeworks.Update(id, homework);
-            return Ok(homework);
+            try {
+                var homework = homeworks.Update(id, HomeworkModel.ToEntity(model));
+                return CreatedAtRoute("Get", new { id = homework.Id }, HomeworkModel.ToModel(homework));
+            } catch(ArgumentException e) {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -65,6 +70,14 @@ namespace Homeworks.WebApi.Controllers
         {
             homeworks.Remove(id);
             return NoContent();
+        }
+
+        protected override void Dispose(bool disposing) {
+            try {
+                base.Dispose(disposing);
+            } finally {
+                homeworks.Dispose();
+            }
         }
     }
 }

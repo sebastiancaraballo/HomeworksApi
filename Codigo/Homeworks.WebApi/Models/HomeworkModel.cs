@@ -1,25 +1,45 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Homeworks.Domain;
 
-public class HomeworkModel {
-    public Guid Id {get; set;}
-    public DateTime DueDate {get; set;}
-    public string Description {get; set;}
-    public HomeworkModel() {
+namespace Homeworks.WebApi.Models
+{
+    public class HomeworkModel : Model<Homework, HomeworkModel>
+    {
+        public Guid Id { get; set; }
+        public string Description { get; set; }
+        public DateTime DueDate { get; set; }
+        public int Score { get; set; }
+        public List<ExerciseModel> Exercises {get; set;}
 
-    }
-    
-    public HomeworkModel(Homework homework) {
-        Id = homework.Id;
-        DueDate = homework.DueDate;
-        Description = homework.Description;
-    }
+        public HomeworkModel()
+        {
+            Exercises = new List<ExerciseModel>();
+        }
 
-    public Homework ToEntity() {
-        return new Homework {
+        public HomeworkModel(Homework entity)
+        {
+            SetModel(entity);
+        }
+
+        public override Homework ToEntity() => new Homework()
+        {
             Id = this.Id,
+            Description = this.Description,
             DueDate = this.DueDate,
-            Description = this.Description
+            Exercises = this.Exercises.ConvertAll(m => m.ToEntity()),
         };
+
+        protected override HomeworkModel SetModel(Homework entity)
+        {
+            Id = entity.Id;
+            Description = entity.Description;
+            DueDate = entity.DueDate;
+            Score = entity.Exercises.Sum(x => x.Score);
+            Exercises = entity.Exercises.ConvertAll(m => new ExerciseModel(m));
+            return this;
+        }
+
     }
 }

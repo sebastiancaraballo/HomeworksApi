@@ -46,25 +46,9 @@ namespace Homeworks.BusinessLogic
             return repository.GetAll();
         }
 
-        #region IDisposable Support
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    repository.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
         public void Dispose()
         {
-            Dispose(true);
+            repository.Dispose();
         }
-        #endregion
     }
 }

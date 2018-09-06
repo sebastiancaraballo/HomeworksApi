@@ -43,7 +43,7 @@ namespace Homeworks.BusinessLogic
             return homeworkToUpdate;
         }
 
-        public Homework AddExercise(Guid id, Exercise exercise)
+        public Exercise AddExercise(Guid id, Exercise exercise)
         {
             Homework homework = repositoryHome.Get(id);
             if (homework == null) {
@@ -52,7 +52,7 @@ namespace Homeworks.BusinessLogic
             homework.Exercises.Add(exercise);
             repositoryHome.Update(homework);
             repositoryHome.Save();
-            return homework;
+            return exercise;
         }
 
         public Homework Get(Guid id) {
@@ -63,26 +63,10 @@ namespace Homeworks.BusinessLogic
             return repositoryHome.GetAll();
         }
 
-        #region IDisposable Support
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    repositoryExer.Dispose();
-                    repositoryHome.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
         public void Dispose()
         {
-            Dispose(true);
+            repositoryExer.Dispose();
+            repositoryHome.Dispose();
         }
-        #endregion
     }
 }
