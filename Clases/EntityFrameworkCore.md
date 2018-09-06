@@ -1,20 +1,14 @@
-# Clase 2
+# Clase 3 - Entity Framework Core - Code First
 
-## Instalacion de ambiente
+## Paquetes Necesarios
 
-* [.NET Core 2.1 downloads](https://www.microsoft.com/net/download/dotnet-core/2.1)
-* [Visual Studio Code](https://code.visualstudio.com/Download)
-* [Postman](https://www.getpostman.com/apps)
-
-## Commandos
-Commando | Resultado
+Paquete | Descripción
 ------------ | -------------
-dotnet new sln| Creamos solucion (solo útil para VisualStudio, cuando queremos abrir la solución y levantar los proyectos asociados)
-dotnet new webapi -n "Nombre del Proyecto"| Crear un nuevo Proyecto del template WebApi
-dotnet sln add | Asociamos el proyecto creado al .sln
-dotnet new classlib -n "Nombre del Proyecto"| Crear un nueva libreria (standard)
-dotnet add "Nombre del Proyecto 1".csproj reference "Nombre del Proyecto 2".csproj| Agrega una referencia al Proyecto 1 del Proyecto 2
-dotnet add package "Nombre del Package" | Instala la Package al proyecto actual
+Microsoft.EntityFrameworkCore| EF Core
+Microsoft.EntityFrameworkCore.Design| Contiene toda la lógica de design-time para EF Core. Contiene clases que nos serviran para indicarle a EF Tools por ejemplo como crear un contexto.
+Microsoft.EntityFrameworkCore.SqlServer| Es el provider para la bd Microsoft SQL Server
+Microsoft.EntityFrameworkCore.Tool| Este paquete permite la ejecución de comandos de entityframework (dotnet ef). Este permite hacer más fácil realizar varias tareas de EF Core, como: migraciones, scaffolding, etc
+Microsoft.EntityFrameworkCore.InMemory| (Opcional) Es un provider para bd en Memoria, es sobretodo útil para testing.
 
 
 ## Commandos para creacion de proyeto HomeworkWebApi
