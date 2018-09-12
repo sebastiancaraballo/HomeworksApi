@@ -1,79 +1,164 @@
-# Clase 2
+# Clase 4 - Filters
 
-## Instalacion de ambiente
+Los filtros en ASP.NET Core permiten ejecutar código antes o después de etapas específicas en la pipeline de una request.
 
-* [.NET Core 2.1 downloads](https://www.microsoft.com/net/download/dotnet-core/2.1)
-* [Visual Studio Code](https://code.visualstudio.com/Download)
-* [Postman](https://www.getpostman.com/apps)
+## Algunos filtros ya construidos:
 
-## Commandos
-Commando | Resultado
+* Authorization (prevenir acceso a una ruta la cual el usuario no esta autorizado)
+* Asegurarce que todas las request usen HTTPS
+* Response caching (shot-circuiting de la request pipeline para retornar una respuesta cachada)
+
+Filters pueden ser creados para manejar 'procupaciones' transversales. 
+Ej: Manejo de excepciones la pueden realizar los filtros, si un metodo lanza una expcecion es atrapado por un filtro y este retorna un 404, entonces con los filtros consolidamos el manejo de este error.
+
+## Como funcionan los filtros:
+Filters corren entre la MVC Action invocation pipeline o fileter pipeliine. La filters pipeline corre despues de que la API 
+selecciona una accion que ejecutar.
+
+![FILTERS-PIPELINE](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters/_static/filter-pipeline-1.png?view=aspnetcore-2.1)
+
+## Tipos de filtros:
+Tipo | Descripcion
 ------------ | -------------
-dotnet new sln| Creamos solucion (solo útil para VisualStudio, cuando queremos abrir la solución y levantar los proyectos asociados)
-dotnet new webapi -n "Nombre del Proyecto"| Crear un nuevo Proyecto del template WebApi
-dotnet sln add | Asociamos el proyecto creado al .sln
-dotnet new classlib -n "Nombre del Proyecto"| Crear un nueva libreria (standard)
-dotnet add "Nombre del Proyecto 1".csproj reference "Nombre del Proyecto 2".csproj| Agrega una referencia al Proyecto 1 del Proyecto 2
-dotnet add package "Nombre del Package" | Instala la Package al proyecto actual
+[Authorization filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1#authorization-filters)| Se ejecutan primiero y son usados para determinar si el usuario actual es autorizado para acceder al recurso actual.
+[Resource filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1#resource-filters)| Se ejecutan luego de la authorizacion. Y sirven para ejecutar codigo antes y despues de que la pipeline termine. Son utiles para caching o shot-circuit la filter pipeline y asi mejorar la performance.
+[Action filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1#action-filters)| Sirven para ejecutar codigo antes y despues de una accion (metodo) es invocado. Son utiles para manipular argumentos pasados en la accion en particular.
+[Exception filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1#exception-filters)| Son usados para aplicar 'politicas' globales para manejar excepciones ocurridas antes de que cualquier cosa sea escrita en el body de la response.
+[Result filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1#result-filters)| Se ejecutan antes y despues de la ejecucion de un action results. Solo se ejecutan cuando un action method a sido ejecutado exitosamente. Son utiles para crear formateadores.
 
+![FILTERS-PIPELINE2](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters/_static/filter-pipeline-2.png?view=aspnetcore-2.1)
 
-## Commandos para creacion de proyeto HomeworkWebApi
+## Implementacion de un Filtro
+Vamos a crear ActionFilter para manejar la autehtificacion a nuestra api.
+Esto no esta bien ya que se deberia de encargar un [Authorization filters](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/index?view=aspnetcore-2.1), para este ejemplo no lo utlizaremos ya que todo lo relacionado a la authorizacion de usuarios ya se encuentra todo muy digerido y implica otros temas como la generacion de tokens con jwt, que prefiero mostrar un poco como funciona un authorization filter por detras y simplificar los tokens, pero son bienvenidos a usarlo para el obl :smile:
 
-### Creamos el sln para poder abrirlo en vs2017 (opcional)
+## Creacion de SessionLogic
+Esta clase se encargara de hacer ABMs de tokens (guids) que usaremos para identificar que usuario esta realizando la request.
 ```
-dotnet new sln
+public class SessionLogic : IDisposable
+{
+    // TENDRIA QUE SER UN SESSION REPOSITORY
+    // SESSION = {
+    //      token: Guid,  
+    //      user: User
+    // }
+    private UserRepository repository;
+
+    public SessionLogic() {
+        repository = new UserRepository(ContextFactory.GetNewContext());
+    }
+
+    public bool IsValidToken(string token)
+    {
+        // SI EL TOKEN EXISTE EN BD RETORNA TRUE
+        return true;
+    }
+
+    public Guid CreateToken(string userName, string password)
+    {
+        // SI EL USUARIO EXISTE Y LA PASS Y EL USERNAME SON EL MISMO
+        // RETORANR GUID
+        return Guid.NewGuid();
+    }
+
+    public bool HasLevel(string token, string role)
+    {  
+        // SI EL DUENIO DEL TOKEN TIENE EL ROLE REQUERIDO
+        // RETORNA TRUE
+        return true;
+    }
+
+    public User GetUser(string token) 
+    {
+        return repository.GetAll().ToList()[0];
+    }
+
+    public void Dispose()
+    {
+        repository.Dispose();
+    }
+}
 ```
 
-### Creamos el proyecto webapi y lo agregamos al sln
+## Login de usuario
+Agregaremos un controller que se encarge de hacer el login de usuarios. 
+Este tiene un post que si el username y la password nos genere un token.
 ```
-dotnet new webapi -au none -n Homeworks.WebApi
-dotnet sln add Homeworks.WebApi\Homeworks.WebApi.csproj
+[Route("api/[controller]")]
+public class TokenController : Controller
+{
+    private SessionLogic sessions;
+
+    public TokenController() 
+    {
+        sessions = new SessionLogic();
+    }
+
+    [HttpPost]
+    public IActionResult Login([FromBody]LoginModel model) {
+        var token = sessions.CreateToken(model.UserName, model.Password);
+        if (token == null) 
+        {
+            return BadRequest("Invalid user/password");
+        }
+        return Ok(token);
+    }
+
+    protected override void Dispose(bool disposing) 
+    {
+        try {
+            base.Dispose(disposing);
+        } finally {
+            sessions.Dispose();
+        }
+    }
+}
 ```
 
-### Creamos la libreria businesslogic y la agregamos al sln
-```
-dotnet new classlib -n Homeworks.BusinessLogic
-dotnet sln add Homeworks.BusinessLogic\Homeworks.BusinessLogic.csproj
-```
+## Creacion del Filtro
+Nuestro ActionFilter va a implementar la interfaz **IActionFilter** que tiene los siguientes metodos **OnActionExecuting** (Se ejecuta antes de el action method y **OnActionExecuted** (Se ejecuta despues del action method), y tambien va heredar de **Attribute** que nos permitira usarlo como **tag** en C#
 
-### Creamos la libreria dataaccess y la agregamos al sln
-```
-dotnet new classlib -n Homeworks.DataAccess
-dotnet sln add Homeworks.DataAccess\Homeworks.DataAccess.csproj
-```
+El constructor va a recivir el role del usuario que tiene permitido ejecutar el action mehtod.
+Y solo implementaremos **OnActionExecuting** ya que solo nos interesa
 
-### Creamos la libreria domain y la agregamos al sln
 ```
-dotnet new classlib -n Homeworks.Domain
-dotnet sln add Homeworks.Domain\Homeworks.Domain.csproj
-```
+public class ProtectFilter : Attribute, IActionFilter
+{
+    private readonly string _role;
 
-### Agregamos referencias de los proyectos a la webapi
-```
-dotnet add Homeworks.WebApi\Homeworks.WebApi.csproj reference Homeworks.DataAccess\Homeworks.DataAccess.csproj
-dotnet add Homeworks.WebApi\Homeworks.WebApi.csproj reference Homeworks.Domain\Homeworks.Domain.csproj
-dotnet add Homeworks.WebApi\Homeworks.WebApi.csproj reference Homeworks.BusinessLogic\Homeworks.BusinessLogic.csproj
-```
+    public ProtectFilter(string role) 
+    {
+        _role = role;
+    }
 
-### Agregamos la referencia del domain al dataaccess
-```
-dotnet add Homeworks.DataAccess\Homeworks.DataAccess.csproj reference Homeworks.Domain\Homeworks.Domain.csproj
-```
+    public void OnActionExecuting(ActionExecutingContext context)
+    {
+        string token = context.HttpContext.Request.Headers["Authorization"];
+        if (token == null) {
+            context.Result = new ContentResult()
+            {
+                Content = "Token is required",
+            };
+        }
+        using (var sessions = new SessionLogic()) {
+            if (!sessions.IsValidToken(token)) {
+                context.Result = new ContentResult()
+                {
+                    Content = "Invalid Token",
+                };
+            }
+            if (!sessions.HasLevel(token, _role)) {
+                context.Result = new ContentResult()
+                {
+                    Content = "The user isen't " + _role,
+                };   
+            }
+        }
+    }
 
-### Agregamos las referencias de domain y dataaccess a businesslogic
-```
-dotnet add Homeworks.BusinessLogic\Homeworks.BusinessLogic.csproj reference Homeworks.Domain\Homeworks.Domain.csproj
-dotnet add Homeworks.BusinessLogic\Homeworks.BusinessLogic.csproj reference Homeworks.DataAccess\Homeworks.DataAccess.csproj
-```
-
-### Descargamos Entity Framework Core
-Nos movemos a la carpeta web api (cd Homeworks.WebApi)
-```
-dotnet add package Microsoft.EntityFrameworkCore
-dotnet add package Microsoft.EntityFrameworkCore.InMemory
-```
-Nos movemos a la carpeta dataaccess (cd Homeworks.DataAccess)
-```
-dotnet add package Microsoft.EntityFrameworkCore
-dotnet add package Microsoft.EntityFrameworkCore.InMemory
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+        
+    }
+}
 ```
