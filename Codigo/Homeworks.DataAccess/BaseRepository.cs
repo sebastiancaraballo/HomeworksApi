@@ -8,7 +8,8 @@ namespace Homeworks.DataAccess
     {
         protected DbContext Context {get; set;}
 
-        public void Add(T entity) {
+        public void Add(T entity) 
+        {
             /*try {
                 TryAdd(entity);
             } catch (ExceptionEntetyFramework e) {
@@ -17,11 +18,13 @@ namespace Homeworks.DataAccess
             Context.Set<T>().Add(entity);
         }
 
-        public void Remove(T entity) {
+        public void Remove(T entity) 
+        {
             Context.Set<T>().Remove(entity);
         }
 
-        public void Update(T entity) {
+        public void Update(T entity) 
+        {
             Context.Entry(entity).State = EntityState.Modified;
         }
 
@@ -29,11 +32,11 @@ namespace Homeworks.DataAccess
 
         public abstract T Get(Guid id);
 
-        public void Save() {
+        public void Save() 
+        {
             Context.SaveChanges();
         }
 
-        #region IDisposable Support
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
@@ -53,6 +56,5 @@ namespace Homeworks.DataAccess
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
     }
 }

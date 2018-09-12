@@ -13,7 +13,8 @@ namespace Homeworks.WebApi.Controllers
     {
         private ExerciseLogic exercises;
 
-        public ExercisesController() {
+        public ExercisesController() 
+        {
             exercises = new ExerciseLogic();
         }
 
@@ -27,13 +28,15 @@ namespace Homeworks.WebApi.Controllers
         public IActionResult Get(Guid id)
         {
             var exercise = exercises.Get(id);
-            if (exercise == null) {
+            if (exercise == null) 
+            {
                 return NotFound();
             }
             return Ok(ExerciseModel.ToModel(exercise));
         }
 
-        protected override void Dispose(bool disposing) {
+        protected override void Dispose(bool disposing) 
+        {
             try {
                 base.Dispose(disposing);
             } finally {

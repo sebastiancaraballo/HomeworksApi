@@ -3,10 +3,22 @@ using System.Collections.Generic;
 
 namespace Homeworks.Domain
 {
-    public class Exercise
+    public class Exercise : IEntity<Exercise>
     {
         public Guid Id {get; set;}
         public string Problem {get; set;}
         public int Score {get; set;}
+
+        public bool IsValid()
+        {
+            return true;
+        }
+
+        public Exercise Update(Exercise entity)
+        {
+            if (entity.Problem != null) 
+                Problem = entity.Problem;
+            return this;
+        }
     }
 }

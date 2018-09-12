@@ -9,46 +9,65 @@ namespace Homeworks.BusinessLogic
     {
         private ExerciseRepository repository;
 
-        public ExerciseLogic() {
+        public ExerciseLogic() 
+        {
             repository = new ExerciseRepository(ContextFactory.GetNewContext());
         }
 
-        public void Create(Exercise exercise) {
+        public void Create(Exercise exercise) 
+        {
+            ThrowErrorIfItsInvalid(exercise);
             repository.Add(exercise);
             repository.Save();
         }
 
-        public void Remove(Guid id) {
+        public void Remove(Guid id) 
+        {
             Exercise exercise = repository.Get(id);
-            if (exercise == null) {
-                throw new ArgumentException("Invalid guid");
-            }
+            ThrowErrorIfItsNull(exercise);
             repository.Remove(exercise);
             repository.Save();
         }
 
-        public void Update(Guid id, Exercise exercise) {
+        public void Update(Guid id, Exercise exercise)
+        {
+            ThrowErrorIfItsInvalid(exercise);
             Exercise exerciseToUpdate = repository.Get(id);
-            if (exercise == null) {
-                throw new ArgumentException("Invalid guid");
-            }
-            exerciseToUpdate.Problem = exercise.Problem;
-            exerciseToUpdate.Score = exercise.Score;
+            ThrowErrorIfItsNull(exerciseToUpdate);
+            exerciseToUpdate.Update(exercise);
             repository.Update(exerciseToUpdate);
             repository.Save();
         }
 
-        public Exercise Get(Guid id) {
+        public Exercise Get(Guid id) 
+        {
             return repository.Get(id);
         }
 
-        public IEnumerable<Exercise> GetAll() {
+        public IEnumerable<Exercise> GetAll() 
+        {
             return repository.GetAll();
         }
 
         public void Dispose()
         {
             repository.Dispose();
+        }
+
+        private static void ThrowErrorIfItsNull(Exercise exercise)
+        {
+            if (exercise == null)
+            {
+                throw new ArgumentException("Invalid guid");
+            }
+        }
+
+        private void ThrowErrorIfItsInvalid(Exercise exercise) 
+        {
+            if (!exercise.IsValid()) 
+            {
+                throw new ArgumentException("Lanza error por que es invaldia la entity");
+            }
         }
     }
 }
