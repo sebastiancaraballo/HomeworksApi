@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Homeworks.Domain
 {
-    public class Homework
+    public class Homework : IEntity<Homework>
     {       
         public Guid Id {get; set;}
         public DateTime DueDate {get; set;}
@@ -13,6 +13,18 @@ namespace Homeworks.Domain
         public Homework()
         {
             Exercises = new List<Exercise>();
+        }
+
+        public bool IsValid()
+        {
+            return true;
+        }
+
+        public Homework Update(Homework entity)
+        {
+            if (entity.Description != null)
+                Description = entity.Description;
+            return this;
         }
     }
 }

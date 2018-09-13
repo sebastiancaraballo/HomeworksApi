@@ -72,7 +72,8 @@ namespace Homeworks.WebApi.Controllers
             return NoContent();
         }
 
-        protected override void Dispose(bool disposing) {
+        protected override void Dispose(bool disposing) 
+        {
             try {
                 base.Dispose(disposing);
             } finally {
