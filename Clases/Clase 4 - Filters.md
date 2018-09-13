@@ -185,8 +185,8 @@ La forma preferida hoy en día para autenticarse desde el front-end ya sea web o
 
 # Mas Info
 
-*[Filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1)
-*[Authorization in Core](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/index?view=aspnetcore-2.1)
-*[JWT Framework](http://enmilocalfunciona.io/construyendo-una-web-api-rest-segura-con-json-web-token-en-net-parte-i/)
-*[JWT Framework](http://codigoenpuntonet.blogspot.com/2016/09/inicio-de-sesion-basado-en-tokens-con.html)
+* [Filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-2.1)
+* [Authorization in Core](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/index?view=aspnetcore-2.1)
+* [JWT Framework](http://enmilocalfunciona.io/construyendo-una-web-api-rest-segura-con-json-web-token-en-net-parte-i/)
+* [JWT Framework](http://codigoenpuntonet.blogspot.com/2016/09/inicio-de-sesion-basado-en-tokens-con.html)
 
