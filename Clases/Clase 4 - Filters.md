@@ -176,11 +176,14 @@ public IActionResult CheckLogin() {
 }
 ```
 
-# Por que usar Tokens
+# Por que usar Tokens (JWT)
 
 La forma preferida hoy en día para autenticarse desde el front-end ya sea web o mobile es la de tokens por las siguientes razones:
+
 **Escalabilidad de servidores**: El token que se envía al servidor es independiente, contiene toda la información necesaria para la autenticación del usuario, por lo que añadir más servidores a la granja es una tarea fácil ya que no depende de una sesión compartida.
+
 **Bajo acoplamiento**: Su aplicación front-end no se acopla con el mecanismo de autenticación específico, el token se genera desde el servidor y su API se construye de una manera que se pueda entender y hacer la autenticación.
+
 **Móvil amigable**: Al tener una forma estándar para autenticar a los usuarios va a simplificar nuestra vida si decidimos consumir la API de servicios de fondo desde aplicaciones nativas como IOS, Android y Windows Phone.
 
 # Mas Info
