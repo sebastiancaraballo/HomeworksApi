@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Homeworks.BusinessLogic;
 using Homeworks.WebApi.Models;
+using Homeworks.WebApi.Filters;
 
 namespace Homeworks.WebApi.Controllers
 {
+    [ProtectFilter("Admin")]
     [Route("api/[controller]")]
     public class HomeworksController : Controller
     {
