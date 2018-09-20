@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Homeworks.BusinessLogic;
+using Homeworks.BusinessLogic.Interface;
+using Homeworks.DataAccess;
 using Homeworks.WebApi.Models;
 
 namespace Homeworks.WebApi.Controllers
@@ -11,11 +10,15 @@ namespace Homeworks.WebApi.Controllers
     [Route("api/[controller]")]
     public class ExercisesController : Controller
     {
-        private ExerciseLogic exercises;
+        private IExerciseLogic exercises;
 
-        public ExercisesController() 
+        public ExercisesController(IExerciseLogic exercises = null) : base()
         {
-            exercises = new ExerciseLogic();
+            if (exercises == null)
+            {
+                exercises = new ExerciseLogic(new ExerciseRepository(ContextFactory.GetNewContext()));
+            }
+            this.exercises = exercises;
         }
 
         [HttpGet]
