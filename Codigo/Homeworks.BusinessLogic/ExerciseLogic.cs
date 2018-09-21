@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
-using Homeworks.DataAccess;
+using Homeworks.BusinessLogic.Interface;
+using Homeworks.DataAccess.Interface;
 using Homeworks.Domain;
 
 namespace Homeworks.BusinessLogic
 {
-    public class ExerciseLogic : IDisposable
+    public class ExerciseLogic : IExerciseLogic
     {
-        private ExerciseRepository repository;
+        private IRepository<Exercise> repository;
 
-        public ExerciseLogic() 
+        public ExerciseLogic(IRepository<Exercise> repository) 
         {
-            repository = new ExerciseRepository(ContextFactory.GetNewContext());
+            this.repository = repository;
         }
 
         public void Create(Exercise exercise) 

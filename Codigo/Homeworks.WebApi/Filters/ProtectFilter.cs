@@ -1,7 +1,8 @@
-using Homeworks.BusinessLogic;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Homeworks.DataAccess;
+using Homeworks.BusinessLogic;
 
 namespace Homeworks.WebApi.Filters {
 
@@ -23,7 +24,7 @@ namespace Homeworks.WebApi.Filters {
                     Content = "Token is required",
                 };
             }
-            using (var sessions = new SessionLogic()) {
+            using (var sessions = new SessionLogic(new UserRepository(ContextFactory.GetNewContext()))) {
                 if (!sessions.IsValidToken(token)) {
                     context.Result = new ContentResult()
                     {

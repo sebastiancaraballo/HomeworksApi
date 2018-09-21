@@ -1,22 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Homeworks.BusinessLogic;
 using Homeworks.WebApi.Models;
 using Homeworks.WebApi.Filters;
+using Homeworks.DataAccess;
+using Homeworks.BusinessLogic.Interface;
 
 namespace Homeworks.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class TokenController : Controller
     {
-        private SessionLogic sessions;
+        private ISessionLogic sessions;
 
-        public TokenController() 
+        public TokenController(ISessionLogic sessions = null) : base()
         {
-            sessions = new SessionLogic();
+            if (sessions == null)
+            {
+                sessions = new SessionLogic(new UserRepository(ContextFactory.GetNewContext()));
+            }
+            this.sessions = sessions;
         }
 
         [HttpPost]

@@ -1,22 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Homeworks.DataAccess;
+using Homeworks.BusinessLogic.Interface;
+using Homeworks.DataAccess.Interface;
 using Homeworks.Domain;
 
 namespace Homeworks.BusinessLogic
 {
-    public class SessionLogic : IDisposable
+    public class SessionLogic : ISessionLogic
     {
         // TENDRIA QUE SER UN SESSION REPOSITORY
         // SESSION = {
         //      token: Guid,  
         //      user: User
         // }
-        private UserRepository repository;
+        private IRepository<User> repository;
 
-        public SessionLogic() {
-            repository = new UserRepository(ContextFactory.GetNewContext());
+        public SessionLogic(IRepository<User> repository) {
+            this.repository = repository;
         }
 
         public bool IsValidToken(string token)

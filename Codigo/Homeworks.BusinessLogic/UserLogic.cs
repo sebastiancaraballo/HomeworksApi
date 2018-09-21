@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Homeworks.DataAccess;
+using Homeworks.BusinessLogic.Interface;
+using Homeworks.DataAccess.Interface;
 using Homeworks.Domain;
 
 namespace Homeworks.BusinessLogic
 {
-    public class UserLogic : IDisposable
+    public class UserLogic : IUserLogic
     {
-        private UserRepository repository;
+        private IRepository<User> repository;
 
-        public UserLogic() {
-            repository = new UserRepository(ContextFactory.GetNewContext());
+        public UserLogic(IRepository<User> repository) {
+            this.repository = repository;
         }
 
         public User Create(User user) 
@@ -38,7 +38,7 @@ namespace Homeworks.BusinessLogic
 
         private void ThrowErrorIfItsInvalid(User user) 
         {
-            if (!user.IsValid()) 
+            if (user == null || !user.IsValid()) 
             {
                 throw new ArgumentException("Lanza error por que es invaldia la entity");
             }

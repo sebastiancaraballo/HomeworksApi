@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Homeworks.DataAccess;
+using Homeworks.BusinessLogic.Interface;
+using Homeworks.DataAccess.Interface;
 using Homeworks.Domain;
 
 namespace Homeworks.BusinessLogic
 {
-    public class HomeworkLogic : IDisposable
+    public class HomeworkLogic : IHomeworkLogic
     {
-        private HomeworkRepository repositoryHome;
-        private ExerciseRepository repositoryExer;
+        private IRepository<Homework> repositoryHome;
+        private IRepository<Exercise> repositoryExer;
 
-        public HomeworkLogic() {
-            var context = ContextFactory.GetNewContext();
-            repositoryHome = new HomeworkRepository(context);
-            repositoryExer = new ExerciseRepository(context);
+        public HomeworkLogic(IRepository<Homework> homeworks, IRepository<Exercise> exercises) {
+            repositoryHome = homeworks;
+            repositoryExer = exercises;
         }
 
         public Homework Create(Homework homework) {

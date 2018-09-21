@@ -1,22 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Homeworks.BusinessLogic;
 using Homeworks.WebApi.Models;
-using Homeworks.WebApi.Filters;
+using Homeworks.DataAccess;
+using Homeworks.BusinessLogic.Interface;
 
 namespace Homeworks.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private UserLogic users;
+        private IUserLogic users;
 
-        public UsersController() 
+        public UsersController(IUserLogic users = null) : base()
         {
-            users = new UserLogic();
+            if (users == null)
+            {
+                users = new UserLogic(new UserRepository(ContextFactory.GetNewContext()));
+            }
+            this.users = users;
         }
 
         [HttpGet]

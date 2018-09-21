@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Homeworks.DataAccess.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace Homeworks.DataAccess
 {
-    public abstract class BaseRepository<T> : IDisposable where T : class
+    public abstract class BaseRepository<T> : IRepository<T> where T : class
     {
         protected DbContext Context {get; set;}
 
