@@ -105,27 +105,27 @@ Cambiemos el contenido del Main por el siguiente:
 static void Main(string[] args)
 {
    // Cargamos el assembly en memoria
-   Assembly testAssembly = Assembly.LoadFile(@"c:\Pruebas\EjemplosReflection.dll"); 
+   Assembly testAssembly = Assembly.LoadFile(@"c:\Pruebas\Homeworks.Domain.dll"); 
    
-   // Obtenemos el tipo que representa a Empleado por Hora (HourEmployee)
-   Type employeeType = testAssembly.GetType("EjemplosReflection.HourEmployee");
+   // Obtenemos el tipo que representa a User
+   Type userType = testAssembly.GetType("Homeworks.Domain.User");
    
-   // Creamos una instancia de Empleado por hora
-   object employeeInstance = Activator.CreateInstance(employeeType);
+   // Creamos una instancia de User
+   object userInstance = Activator.CreateInstance(userType);
    
    // O también podemos crearlo pasandole parámetros
-   employeeInstance = Activator.CreateInstance(employeeType, new object[] { "Juan", "1.232.232-3", 25.5, 10 });
+   userInstance = Activator.CreateInstance(userInstance, new object[] { "Juan" });
    
    // Lo mostramos
-   Console.WriteLine(employeeInstance.ToString());
+   Console.WriteLine(userInstance.ToString());
    
-   //Invocamos al método CalculateSalary
-   MethodInfo met = employeeType.GetMethod("CalculateSalary");
-   Console.WriteLine(string.Format("Sueldo: {0}", met.Invoke(employeeInstance, null)));
+   //Invocamos al método
+   MethodInfo met = userType.GetMethod("IsValid");
+   Console.WriteLine(string.Format("Es Valido: {0}", met.Invoke(userInstance, null)));
    
-   //También podemos cambiar el valor de las horas trabajadas
-   PropertyInfo prop = employeeType.GetProperty("HoursWorked");
-   prop.SetValue(employeeInstance, 300, null);
+   //También podemos cambiar su nombre
+   PropertyInfo prop = userType.GetProperty("Name");
+   prop.SetValue(userInstance, "Manuel", null);
    
    Console.ReadLine();  
 }
@@ -206,3 +206,169 @@ Logramos resolver lo que antes habíamos descrito como desventajas o problemas.
 
 Vimos como inyectar dependencias a través del constructor. Sin embargo, ahora tenemos un problema, el cuál es dónde construir nuestras dependencias (dónde hacer el **new**).
 
+Para resolver resolver este problema utilizaremos el ServiceProvaider (DependencyInjection) que nos brinda WebApi que nos permite inyectar dependencias.
+
+## Preparando Nuestra WebApi
+
+Lo primero que vamos a hacer es modificar nuestros constructores del las clases DataAcces, Controllers y Logic, para permitir la ID.
+
+***En Nuestro StartUp***
+En el metodo ConfigureServices vamos a decirle a nuestra api que implementacion tiene que usar para cada interfaz.
+EJ: Aca le estamos diciendo a nuestra WebApi, que cada vez que se presente IUserLogic como dependencia que cree una instancia de UserLogic y la inyecte.
+```c#
+services.AddScoped<IUserLogic, UserLogic>();
+```
+Quedando de esta manera:
+```C#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+    //services.AddDbContext<DbContext, HomeworksContext>(o => 
+    //    o.UseSqlServer(Configuration.GetConnectionString("HomeworksDB")));
+    services.AddDbContext<DbContext, HomeworksContext>(
+        options => options.UseInMemoryDatabase("HomeworksDB"));
+    services.AddScoped<IUserLogic, UserLogic>();
+    services.AddScoped<IHomeworkLogic, HomeworkLogic>();
+    services.AddScoped<IExerciseLogic, ExerciseLogic>();
+    services.AddScoped<ISessionLogic, SessionLogic>();
+    services.AddScoped<IRepository<User>, UserRepository>();
+    services.AddScoped<IRepository<Homework>, HomeworkRepository>();
+    services.AddScoped<IRepository<Exercise>, ExerciseRepository>();
+}
+```
+***Para EF Core:*** Con esto le indicamos que cuando se necesite un DbContext se inyecte un HomeworksContext y le va a pasar por el constructor un DbContextOptions confiugrado para usar el SqlServer con un connection string que se encuentra en el archivo de configuracion.
+```C#
+services.AddDbContext<DbContext, HomeworksContext>(o => o.UseSqlServer(Configuration.GetConnectionString("HomeworksDB")));
+```
+***Archivo de Configuracion (appsettings.json)*** encontramos la siguiente linea:
+```
+"ConnectionStrings": {
+    "HomeworksDB": "Server=.\\SQLEXPRESS;Database=HomeworksDB;Trusted_Connection=True;MultipleActiveResultSets=True;"
+ },
+```
+
+Pero con todo esto realizado todavia nuestra WebApi conoce la implementaciones de nuestras interfaces. Para resolver esto vamos a crear un nuevo paquete (```Homeworks.Factory```) que se encargara de realizar estas inyeciones:
+
+Y crearemos la siguiente clase:
+```C#
+public class BuisnessLogicFactory
+{
+    private DbContext context;
+    private string assemblyPath;
+
+    public BuisnessLogicFactory(IConfiguration configuration)
+    {
+// ESTE IF ES DE PRE-COMPILACION Y CON EL LE INDICAMOS AL COMPILADO QUE SI ESTA EL FLAG DEBUG ACTIVADO
+// EJECUTE EL THEN SI NO EL ELSE
+// EN assemblyPath SE ENCUENTRA LA RUTA DE DONDE ENCONTRAREMOS EL DLL DE BUSINESSLOGIC
+#if DEBUG
+        assemblyPath = AppDomain.CurrentDomain.BaseDirectory + @"Homeworks.BusinessLogic.dll";
+#else
+        assemblyPath = configuration.GetValue<string>("AssemblyPath");
+#endif
+        string type = configuration.GetValue<string>("ConnectionType");
+        if (type == "MEMORY") {
+            context = ContextFactory.GetMemoryContext();
+        } else {
+            string connection = configuration.GetConnectionString("HomeworksDB");
+            context = ContextFactory.GetSqlContext(connection);
+        }            
+    }
+
+    // ESTE METODO TIENE MUCHO ESPACIO PARA MEJORAR :)
+    // CON ESTE METODO EL TIPO QUE NOS PASAN INSTANCIAMOS LA CLASE DESDE EL ASSEMBLY USANDO 
+    // ESTE METODO: GetInstanceOfInterface
+    // PODEMOS MEJORAR ESTE METODO INSTANCIANDO LOS REPOSITORIOS DE LA MISMA MANERA
+    public object GetService(Type type)
+    {
+        if (typeof(IUserLogic).Equals(type))
+            return GetInstanceOfInterface<IUserLogic>(new UserRepository(context));
+        if (typeof(IExerciseLogic).Equals(type))
+            return GetInstanceOfInterface<IExerciseLogic>(new ExerciseRepository(context));
+        if (typeof(IHomeworkLogic).Equals(type))
+            return GetInstanceOfInterface<IHomeworkLogic>(
+                new HomeworkRepository(context),
+                new ExerciseRepository(context)
+            );
+        if (typeof(ISessionLogic).Equals(type))
+            return GetInstanceOfInterface<ISessionLogic>(new UserRepository(context));
+        throw new ArgumentException();
+    }
+
+    public T GetService<T>() where T : class
+    {
+        return GetService(typeof(T)) as T;
+    }
+
+    public static T AddService<T>(IServiceProvider service) where T : class
+    {
+        var factorty = service.GetService(typeof(BuisnessLogicFactory)) as BuisnessLogicFactory;
+        return factorty.GetService<T>();
+    }
+
+    // ESTE METODO BUSCA LA INTERFAZ EN EL DLL Y SI LA ENCUENTRA LA INSTANCIA SI NO LANZA UN NULL REFERENCE EXCEPTION
+    private Interface GetInstanceOfInterface<Interface>(params object[] args)
+    {
+        try
+        {
+            Assembly assembly = Assembly.LoadFile(assemblyPath);
+            IEnumerable<Type> implementations = GetTypesInAssembly<Interface>(assembly);
+            if (implementations.Count() <= 0)
+            {
+                throw new NullReferenceException(assemblyPath + " don't contains Types that extend from " + nameof(Interface));
+            }
+
+            return (Interface)Activator.CreateInstance(implementations.First(), args);
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Can't load assembly " + assemblyPath, e);
+        }
+
+    }
+
+    private static IEnumerable<Type> GetTypesInAssembly<Interface>(Assembly assembly)
+    {
+        List<Type> types = new List<Type>();
+        foreach (var type in assembly.GetTypes())
+        {
+            if (typeof(Interface).IsAssignableFrom(type))
+                types.Add(type);
+        }
+        return types;
+    }
+}
+```
+
+A demas de esta clase crearemos el siguiente metodo de extension de ```IServiceCollection``` para que nos resulte mas comodo agregarlos a este.
+```c#
+public static class BLServiceCollectionServiceExtensions
+{
+    public static IServiceCollection AddLogic<T>(this IServiceCollection service)
+        where T : class
+    {
+        return service.AddScoped(p => BuisnessLogicFactory.AddService<T>(p));
+    }
+}
+```
+
+Volviendo a nuestro ***StartUp***
+Lo actualizaremos para usar nuestro metodo de extension.
+Ahora inyectaremos nuestra Factory
+Y usamos nuestro metodo de extension para inyectar las interfaces.
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+
+    services.AddScoped<BuisnessLogicFactory>();
+    services.AddLogic<IUserLogic>();
+    services.AddLogic<IHomeworkLogic>();
+    services.AddLogic<IExerciseLogic>();
+    services.AddLogic<ISessionLogic>();
+}
+```
+
+## Mas Info
+* [StartUp](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup?view=aspnetcore-2.1)
+* [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1)
