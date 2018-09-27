@@ -32,7 +32,7 @@ Por ejemplo podríamos hacer que el usuario elija (a medida que está usando la 
 Lo que es importante para lograr el desacoplamiento de tipos externos, es que nuestro código referencie a una Interfaz, que es la que toda .dll externa va a tener que cumplir. Tiene que existir entonces ese contrato previo, de lo contrario, no sería posible saber de antemano qué metodos llamar de las librerías externas que poseen clases para usar loggers.
 
 ## Ejemplo en ```C#```
-Ahora tomaremos el ensamblado (dll) Homeworks.Domain y lo moveremos a una carpeta que sepamos para poder inpecionarlo por ejemplo: ```c:\pruebas:```
+Ahora tomaremos el ensamblado (dll) Homeworks.Domain y lo moveremos a una carpeta que sepamos para poder inpecionarlo por ejemplo: ```c:\pruebas\```
 
 Lo primero que probaremos será la capacidad de inspección que ofrece reflection sobre los
 assemblies. Para ello, en el método Main agregaremos el siguiente códig. Nota: Se deberán agregar algunos imports.
@@ -40,7 +40,54 @@ assemblies. Para ello, en el método Main agregaremos el siguiente códig. Nota:
 Primero inspeccionamos el assembly:
 
 ```C#
+using System;
+using System.Reflection;
 
+namespace Reflection
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Cargamos el assembly de ejemplo en memoria
+            Assembly miAssembly = Assembly.LoadFile(@"c:\Pruebas\Homeworks.Domain.dll");
+            // Podemos ver que Tipos hay dentro del assembly
+            foreach (Type tipo in miAssembly.GetTypes())
+            {
+                Console.WriteLine(string.Format("Clase: {0}", tipo.Name));
+
+                Console.WriteLine("Propiedades");
+                foreach (PropertyInfo prop in tipo.GetProperties())
+                {
+                    Console.WriteLine(string.Format("\t{0} : {1}", prop.Name, prop.PropertyType.Name));
+                }
+                Console.WriteLine("Constructores");
+                foreach (ConstructorInfo con in tipo.GetConstructors())
+                {
+                    Console.Write("\tConstructor: ");
+                    foreach (ParameterInfo param in con.GetParameters())
+                    {
+                        Console.Write(string.Format("{0} : {1} ", param.Name, param.ParameterType.Name));
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                Console.WriteLine("Metodos");
+                foreach (MethodInfo met in tipo.GetMethods())
+                {
+                    Console.Write(string.Format("\t{0} ", met.Name));
+                    foreach (ParameterInfo param in met.GetParameters())
+                    {
+                        Console.Write(string.Format("{0} : {1} ", param.Name, param.ParameterType.Name));
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+        }
+    }
+}
 ```
 
 Analizar detenidamente la salida.
