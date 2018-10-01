@@ -97,7 +97,7 @@ Acabamos de ver como mediante reflection es posible investigar el contenido de u
 ![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/reflectionDomain.PNG)
 
 ## Instanciando tipos dinámicamente
-Como ya hemos mencionado, otra de las pricipales ventajas de reflection es que además de poder conocer información sobre los tipos dentro de un assembly, permite trabajar con ellos de manera dinámica. Para ejemplificarlo, vamos a crear un objeto de la clase HourEmployee utilizando un constructor con parámetros, le vamos a cambiar el valor de una de sus propiedades y luego le invocaremos un método. Todo esto desde nuestra aplicación de consola, que NO tiene una referencia a la dll con las clases, por lo que todo se hará de manera dinámica.
+Como ya hemos mencionado, otra de las pricipales ventajas de reflection es que además de poder conocer información sobre los tipos dentro de un assembly, permite trabajar con ellos de manera dinámica. Para ejemplificarlo, vamos a crear un objeto de la clase User utilizando un constructor con parámetros, le vamos a cambiar el valor de una de sus propiedades y luego le invocaremos un método. Todo esto desde nuestra aplicación de consola, que NO tiene una referencia a la dll con las clases, por lo que todo se hará de manera dinámica.
 
 Cambiemos el contenido del Main por el siguiente:
 ```C#
