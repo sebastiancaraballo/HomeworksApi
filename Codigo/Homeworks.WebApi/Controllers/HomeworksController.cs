@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Homeworks.BusinessLogic;
 using Homeworks.BusinessLogic.Interface;
-using Homeworks.DataAccess;
 using Homeworks.WebApi.Models;
 using Homeworks.WebApi.Filters;
 
@@ -14,15 +12,8 @@ namespace Homeworks.WebApi.Controllers
     {
         private IHomeworkLogic homeworks;
 
-        public HomeworksController(IHomeworkLogic homeworks = null) : base()
+        public HomeworksController(IHomeworkLogic homeworks) : base()
         {
-            if (homeworks == null)
-            {
-                var context = ContextFactory.GetNewContext();
-                var homeworkRepo = new HomeworkRepository(context);
-                var exerciseRepo = new ExerciseRepository(context);
-                homeworks = new HomeworkLogic(homeworkRepo, exerciseRepo);
-            }
             this.homeworks = homeworks;
         }
 

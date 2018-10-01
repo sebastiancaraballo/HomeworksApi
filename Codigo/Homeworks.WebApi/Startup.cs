@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Homeworks.BusinessLogic.Interface;
+using Homeworks.DataAccess.Interface;
+using Homeworks.Factory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -24,6 +28,26 @@ namespace Homeworks.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+        
+            //services.AddDbContext<DbContext, HomeworksContext>(
+            //    o => o.UseSqlServer(Configuration.GetConnectionString("HomeworksDB"))
+            //);
+            //services.AddDbContext<DbContext, HomeworksContext>(
+            //    o => o.UseInMemoryDatabase("HomeworksDB")
+            //);
+            //services.AddScoped<IUserLogic, UserLogic>();
+            //services.AddScoped<IRepository<User>, UserRepository>();
+            //services.AddScoped<IHomeworkLogic, HomeworkLogic>();
+            //services.AddScoped<IRepository<Homework>, HomeworkRepository>();
+            //services.AddScoped<IExerciseLogic, ExerciseLogic>();
+            //services.AddScoped<IRepository<Exercise>, ExerciseRepository>();
+            //services.AddScoped<ISessionLogic, SessionLogic>();
+
+            services.AddScoped<BuisnessLogicFactory>();
+            services.AddLogic<IUserLogic>();
+            services.AddLogic<IHomeworkLogic>();
+            services.AddLogic<IExerciseLogic>();
+            services.AddLogic<ISessionLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

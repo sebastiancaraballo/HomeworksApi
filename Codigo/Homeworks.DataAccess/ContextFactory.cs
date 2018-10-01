@@ -22,27 +22,24 @@ namespace Homeworks.DataAccess
 
         public static HomeworksContext GetNewContext(ContextType type = ContextType.MEMORY) 
         {
-            var builder = new DbContextOptionsBuilder<HomeworksContext>();
-            DbContextOptions options = null;
-            if (type == ContextType.MEMORY) {
-                options = GetMemoryConfig(builder);
-            } else {
-                options = GetSqlConfig(builder);
+            if (type == ContextType.SQL) {
+                return GetSqlContext(@"Server=.\SQLEXPRESS;Database=HomeworksDB;Trusted_Connection=True;MultipleActiveResultSets=True;");
             }
-            return new HomeworksContext(options);
+            return GetMemoryContext();
         }
 
-        private static DbContextOptions GetMemoryConfig(DbContextOptionsBuilder builder) 
+        public static HomeworksContext GetMemoryContext() 
         {
+            var builder = new DbContextOptionsBuilder<HomeworksContext>();
             builder.UseInMemoryDatabase("HomeworksDB");
-            return builder.Options;
+            return new HomeworksContext(builder.Options);
         }
-
-        private static DbContextOptions GetSqlConfig(DbContextOptionsBuilder builder) 
+        
+        public static HomeworksContext GetSqlContext(string connection)
         {
-            builder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=HomeworksDB;
-                Trusted_Connection=True;MultipleActiveResultSets=True;");
-            return builder.Options;
-        }   
+            var builder = new DbContextOptionsBuilder<HomeworksContext>();
+            builder.UseSqlServer(connection);
+            return new HomeworksContext(builder.Options);
+        }
     }
 }

@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Homeworks.BusinessLogic;
 using Homeworks.WebApi.Models;
 using Homeworks.WebApi.Filters;
-using Homeworks.DataAccess;
 using Homeworks.BusinessLogic.Interface;
 
 namespace Homeworks.WebApi.Controllers
@@ -12,12 +10,8 @@ namespace Homeworks.WebApi.Controllers
     {
         private ISessionLogic sessions;
 
-        public TokenController(ISessionLogic sessions = null) : base()
+        public TokenController(ISessionLogic sessions) : base()
         {
-            if (sessions == null)
-            {
-                sessions = new SessionLogic(new UserRepository(ContextFactory.GetNewContext()));
-            }
             this.sessions = sessions;
         }
 

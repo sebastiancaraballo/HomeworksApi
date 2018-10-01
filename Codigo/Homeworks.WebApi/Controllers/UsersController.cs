@@ -1,8 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using Homeworks.BusinessLogic;
 using Homeworks.WebApi.Models;
-using Homeworks.DataAccess;
 using Homeworks.BusinessLogic.Interface;
 
 namespace Homeworks.WebApi.Controllers
@@ -12,12 +10,8 @@ namespace Homeworks.WebApi.Controllers
     {
         private IUserLogic users;
 
-        public UsersController(IUserLogic users = null) : base()
+        public UsersController(IUserLogic users) : base()
         {
-            if (users == null)
-            {
-                users = new UserLogic(new UserRepository(ContextFactory.GetNewContext()));
-            }
             this.users = users;
         }
 
