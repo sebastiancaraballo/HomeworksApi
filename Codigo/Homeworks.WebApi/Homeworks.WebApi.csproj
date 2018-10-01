@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Homeworks.DataAccess\Homeworks.DataAccess.csproj" />
     <ProjectReference Include="..\Homeworks.Domain\Homeworks.Domain.csproj" />
     <ProjectReference Include="..\Homeworks.BusinessLogic\Homeworks.BusinessLogic.csproj" />
+    <ProjectReference Include="..\Homeworks.Factory\Homeworks.Factory.csproj" />
   </ItemGroup>
 
 </Project>

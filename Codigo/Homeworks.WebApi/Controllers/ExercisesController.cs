@@ -1,8 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using Homeworks.BusinessLogic;
 using Homeworks.BusinessLogic.Interface;
-using Homeworks.DataAccess;
 using Homeworks.WebApi.Models;
 
 namespace Homeworks.WebApi.Controllers
@@ -12,12 +10,8 @@ namespace Homeworks.WebApi.Controllers
     {
         private IExerciseLogic exercises;
 
-        public ExercisesController(IExerciseLogic exercises = null) : base()
+        public ExercisesController(IExerciseLogic exercises) : base()
         {
-            if (exercises == null)
-            {
-                exercises = new ExerciseLogic(new ExerciseRepository(ContextFactory.GetNewContext()));
-            }
             this.exercises = exercises;
         }
 
