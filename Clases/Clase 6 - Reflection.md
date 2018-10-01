@@ -369,6 +369,31 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+## Obtener un servicio para un filtro
+Para obtener un servicio dentro de un filtro se lo vamos a tener que pedir directamente al httpcontext, ya que no podemos inyectar servicio en los constructores de un filtro, si lo usamos como atributo.
+Entonces si teniamos en nuestro filtro
+```c#
+public void OnActionExecuting(ActionExecutingContext context)
+{
+    //CODIGO ..
+    using (var sessions = new SessionLogic()) {
+        //CODIGO ...
+    }
+    //CODIGO ...
+}
+```
+Ahora para para pedir un servicio invocamos el siguiente metodo ```context.HttpContext.RequestServices.GetService(TYPO_DEL_SERVICIO_QUE_BUSCAMOS_INYECTAR)``` que nos retorna un object que es del tipo del servicio. Entonces a tener:
+```c#
+public void OnActionExecuting(ActionExecutingContext context)
+{U
+    //CODIGO ..
+    using (ISessionLogic sessions = (ISessionLogic)context.HttpContext.RequestServices.GetService(typeof(ISessionLogic))) {
+        //CODIGO ...
+    }
+    //CODIGO ...
+}
+```
+
 ## Mas Info
 * [StartUp](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup?view=aspnetcore-2.1)
 * [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1)
