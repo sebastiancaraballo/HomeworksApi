@@ -19,7 +19,7 @@ Y alli, elegimos: "Activar o desactivar caracteristicas de Windows". Alli dentro
 
 5) Abrimos el Administrador de Internet Information Services (IIS). Esto llegamos haciendo run de "inetmgr" o buscando en Windows.
 
-Ahora vamos a Modulos y nos fijamos si tenemos instalado el modulo "" si no es el caso vamos [aqui](https://www.microsoft.com/net/download) y descargamos **.NET Core Runtime**
+Ahora vamos a Modulos y nos fijamos si tenemos instalado el modulo "AspNetCoreModule" si no es el caso vamos [aqui](https://www.microsoft.com/net/download) y descargamos **.NET Core Runtime**
 
 Agregar un nuevo Sitio. Para ello se hace click derecho sobre “Sitios” y se Agrega un Nuevo sitio. Se le pone un nuevo nombre, se elige la ruta física del proyecto de la Web Api  que acabamos de copiar y luego se elige el puerto 8080, 12345, o alguno que no esté en uso.
 
