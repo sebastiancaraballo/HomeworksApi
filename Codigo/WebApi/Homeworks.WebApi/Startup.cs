@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Homeworks.DataAccess;
+using Homeworks.BusinessLogic;
+using Homeworks.Domain;
 
 namespace Homeworks.WebApi
 {
@@ -56,14 +59,9 @@ namespace Homeworks.WebApi
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();       
             }
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "Default",
-                    template: "api/{controller}/{id?}"
-                );
-            });
+            app.UseMvc();
         }
     }
 }
