@@ -168,11 +168,21 @@ public class ProtectFilter : Attribute, IActionFilter
 
 ## Uso del filtro
 Para usar el filtro simplemente debemos agregar el nombre del filtro como atributo.
+Encima de un metodo si quien que se ejecute cuando ese metodo es invocado.
 ```
 [ProtectFilter("Admin")]
 [HttpGet("Check")]
 public IActionResult CheckLogin() {
     return Ok(new UserModel(sessions.GetUser(Request.Headers["Authorization"])));
+}
+```
+O encima de un controller si quieren que se ejecute para cada uno de los metodos de este.
+```
+[ProtectFilter("Admin")]
+[Route("api/[controller]")]
+public class HomeworksController : Controller
+{
+    //...
 }
 ```
 
