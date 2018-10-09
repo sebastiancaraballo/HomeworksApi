@@ -80,3 +80,4 @@ Quedando de esta manera:
 ## Mas Info
 
 * [WebADV](https://www.ryadel.com/en/error-405-methods-not-allowed-asp-net-core-put-delete-requests/)
+* [Aulas Guia](https://aulas.ort.edu.uy/pluginfile.php/327939/mod_resource/content/1/Deploy%20Ob1.pdf)
