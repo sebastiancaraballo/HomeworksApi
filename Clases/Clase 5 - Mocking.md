@@ -32,11 +32,11 @@ En consecuencia, generamos un **bajo acoplamiento** entre una clase y sus depend
 
 Instalaremos la extensión para VS Code: .NET Core Test Explorer, esta nos permitirá explorar las pruebas creadas con mayor facilidad.
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/netCoreTestExplorer.PNG)
+![alt text](../imgs/netCoreTestExplorer.PNG)
 
 Luego lo configuraremos para que detecte nuestros proyectos de prueba para esto agregaremos la siguiente configuración a nuestro espacio de trabajo:
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/testExplorerConfig.PNG)
+![alt text](../imgs/testExplorerConfig.PNG)
 
 ## Empezando con Moq
 
