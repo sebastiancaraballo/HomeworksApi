@@ -34,7 +34,7 @@ Esto no está bien ya que se debería de encargar un [Authorization filters](htt
 
 ## Creación de SessionLogic
 Esta clase se encargará de hacer ABMs de tokens (guids) que usaremos para identificar que usuario está realizando la request.
-```
+```c#
 public class SessionLogic : IDisposable
 {
     // TENDRIA QUE SER UN SESSION REPOSITORY
@@ -83,7 +83,7 @@ public class SessionLogic : IDisposable
 ## Login de usuario
 Agregaremos un controller que se encarga de hacer el login de usuarios. 
 Este tiene un post que si el username y la password nos genere un token.
-```
+```c#
 [Route("api/[controller]")]
 public class TokenController : Controller
 {
@@ -120,7 +120,7 @@ Nuestro ActionFilter va a implementar la interfaz **IActionFilter** que tiene lo
 
 El constructor va a recibir el role del usuario que tiene permitido ejecutar el action mehtod. Y solo implementaremos **OnActionExecuting** ya que solo nos interesa controlar si impedir o permitir el acceso al action method antes de que se ejecute.
 
-```
+```c#
 public class ProtectFilter : Attribute, IActionFilter
 {
     private readonly string _role;
@@ -169,7 +169,7 @@ public class ProtectFilter : Attribute, IActionFilter
 ## Uso del filtro
 Para usar el filtro simplemente debemos agregar el nombre del filtro como atributo.
 Encima de un metodo si quien que se ejecute cuando ese metodo es invocado.
-```
+```c#
 [ProtectFilter("Admin")]
 [HttpGet("Check")]
 public IActionResult CheckLogin() {
@@ -177,7 +177,7 @@ public IActionResult CheckLogin() {
 }
 ```
 O encima de un controller si quieren que se ejecute para cada uno de los metodos de este.
-```
+```c#
 [ProtectFilter("Admin")]
 [Route("api/[controller]")]
 public class HomeworksController : Controller
@@ -202,5 +202,3 @@ La forma preferida hoy en día para autenticarse desde el front-end ya sea web o
 * [Authorization in Core](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/index?view=aspnetcore-2.1)
 * [JWT Framework](http://enmilocalfunciona.io/construyendo-una-web-api-rest-segura-con-json-web-token-en-net-parte-i/)
 * [JWT Framework](http://codigoenpuntonet.blogspot.com/2016/09/inicio-de-sesion-basado-en-tokens-con.html)
-
-
