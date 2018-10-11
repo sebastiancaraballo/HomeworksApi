@@ -94,7 +94,7 @@ Analizar detenidamente la salida.
 
 Acabamos de ver como mediante reflection es posible investigar el contenido de un assembly, obtener su información, como conocer las propiedades, los constructores y los métodos de cada clase. 
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/reflectionDomain.PNG)
+![alt text](../imgs/reflectionDomain.PNG)
 
 ## Instanciando tipos dinámicamente
 Como ya hemos mencionado, otra de las pricipales ventajas de reflection es que además de poder conocer información sobre los tipos dentro de un assembly, permite trabajar con ellos de manera dinámica. Para ejemplificarlo, vamos a crear un objeto de la clase User utilizando un constructor con parámetros, le vamos a cambiar el valor de una de sus propiedades y luego le invocaremos un método. Todo esto desde nuestra aplicación de consola, que NO tiene una referencia a la dll con las clases, por lo que todo se hará de manera dinámica.
@@ -385,7 +385,7 @@ public void OnActionExecuting(ActionExecutingContext context)
 Ahora para para pedir un servicio invocamos el siguiente metodo ```context.HttpContext.RequestServices.GetService(TYPO_DEL_SERVICIO_QUE_BUSCAMOS_INYECTAR)``` que nos retorna un object que es del tipo del servicio. Entonces a tener:
 ```c#
 public void OnActionExecuting(ActionExecutingContext context)
-{U
+{
     //CODIGO ..
     using (ISessionLogic sessions = (ISessionLogic)context.HttpContext.RequestServices.GetService(typeof(ISessionLogic))) {
         //CODIGO ...
