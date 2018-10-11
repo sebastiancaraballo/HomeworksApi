@@ -13,7 +13,7 @@ connectionstring del **appsettings.json** de nuestra web api.
 
 Panel de control\Todos los elementos de Panel de control\Programas y características
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep1.PNG)
+![alt text](../imgs/dep1.PNG)
 
 Y alli, elegimos: "Activar o desactivar caracteristicas de Windows". Alli dentro, tickear la opcion Internet Information Services y todo su interior. 
 
@@ -21,29 +21,29 @@ Y alli, elegimos: "Activar o desactivar caracteristicas de Windows". Alli dentro
 
 5) Abrimos el Administrador de Internet Information Services (IIS). Esto llegamos haciendo run de "inetmgr" o buscando en Windows.
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep2.PNG)
+![alt text](../imgs/dep2.PNG)
 
 Ahora vamos a Modulos y nos fijamos si tenemos instalado el modulo "AspNetCoreModule" si no es el caso vamos [aqui](https://www.microsoft.com/net/download) y descargamos **.NET Core Runtime**
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep3.PNG)
+![alt text](../imgs/dep3.PNG)
 
 Agregar un nuevo Sitio. Para ello se hace click derecho sobre “Sitios” y se Agrega un Nuevo sitio. Se le pone un nuevo nombre, se elige la ruta física del proyecto de la Web Api  que acabamos de copiar y luego se elige el puerto 8080, 12345, o alguno que no esté en uso.
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep4.PNG)
+![alt text](../imgs/dep4.PNG)
 
 6) Ahora vamos a Application Pools (encima de Sitios) y buscamos el pool que le asignamos al sitio (por lo general el nombre de este) y hacemos clic en este en .NET CLR Version selecionamos No Managed Code aceptamos y listo
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep5.PNG)
+![alt text](../imgs/dep5.PNG)
 
 7) Abrir SQL Server Management Studio. En nuestra instancia de la BD, buscamos la pestaña Servidor/Inicios de Sesión. Click derecho y le damos ‘Nuevo Inicio de Sesión’.
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep6.PNG)
+![alt text](../imgs/dep6.PNG)
 
 8) Como nombre de inicio de sesión agregamos: IIS APPPOOL\Nombre_de_nuestro_sitio_en_IIS. Luego damos Aceptar.
 
 9) Vemos que se agregó un nuevo Inicio de Sesión. Le damos click derecho/propiedades.
 
-![alt text](https://github.com/Sactos/HomeworksApi/blob/master/imgs/dep7.PNG)
+![alt text](../imgs/dep7.PNG)
 
 10) En roles del servidor, elegimos dbcreator/public/sysadmin y damos aceptar.
 
