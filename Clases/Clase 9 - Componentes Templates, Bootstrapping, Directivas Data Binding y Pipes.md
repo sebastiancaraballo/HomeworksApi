@@ -603,7 +603,7 @@ Cuando los datos no están en el formato apropiado que queremos para mostrarlos,
 Los pipes en general se denotan con el caracter ```|``` (pipe), expresión.
 Por ahora, nos quedamos con pipes simples, como los de la imagen:
 
-![imagen](doc-images/pipes-sample.png)
+![imagen](../imgs/angular-clase2/pipes-sample.png)
 
 Para ello, simplemente cambiamos:
 ```html
