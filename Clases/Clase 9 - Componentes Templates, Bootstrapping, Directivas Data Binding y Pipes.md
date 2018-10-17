@@ -366,3 +366,330 @@ export class HomeworksListComponent implements OnInit {
     }
 }
 ```
+
+### 5. Agregamos el componente nuevo a través de su selector.
+Lo que haremos aquí es usar el selector ```app-homeworks-list``` en el root component, es decir el AppComponent.
+
+De manera que en ```app.component.ts``` quedaría algo como:
+```typescript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+    title:string = 'Homeworks Angular';
+    name:string = "Santiago Mnedez";
+    email : string = "santi17mendez@hotmail.com";
+    address = {
+        street: "la dirección del profe",
+        city: "Montevideo",
+        number: "1234"
+    }
+}
+```
+Y nuestro ```app.component.html```:
+```html
+<div style="text-align:center">
+    <h1>Bienvenidos a {{title}}</h1>
+    <h2>Curso de DA2 de {{name}}</h2>
+    <p> <strong>Email:</strong> {{email}} </p>
+    <p> <strong>Dirección:</strong> {{address.street}} {{address.number}} de la ciudad - {{address.city}} </p>
+</div>
+<app-homeworks-list></app-homeworks-list>
+```
+Sin embargo, con esto no basta, ya que para que un componente pueda usar a otro componente (a través de su selector), estos deben pertenecer al mismo módulo, o el módulo del componente que importa debe importar al mdulo del otro componente.
+
+En consecuencia, vamos a ```app.module.ts```, y aseguraros que se encuentre el import:
+```typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeworksListComponent,
+  ],
+  imports: [
+    BrowserModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+¿Como hace el componente para saber a dónde buscar el component? Cómo ya dijimos, ahora lo encuentra porque pertenecen al mismo modulo. El módulo que sea dueño de este component es examinado para encontrar todas las directivas que pertenecen al mismo.
+
+### 5. Usando Data Binding para mostrar datos dinmicos
+
+Tenemos una pequeña tabla que muestra cosas, pero todavía no tiene ningún tipo de interacción, por lo que comenzaremos a explorar más a fondo las features del data binding que nos permiten manejar eventos y user input.
+
+Ahora lo que queremos es ver poner contenido dinámico en nuestro componente. Para ello, repasemos el concepto de **Binding**. Este es el mecanismo que tiene Angular para coordinar los datos que existen en la clase de nuestro componente con su template, es decir en cómo se pasan los datos entre uno y otro.
+
+La sintaxis del binding siempre se define en el template, a partir de lo que ya sabemos que se llama **interpolación**
+
+![imagen](../imgs/angular-clase2/interpolacion-ejemplo.png)
+
+La interpolación soporta mucho más que el mostrado properties simples, también permite realizar operaciones complejas o cálculos, o llamar métodos!
+
+Hacer cambio en el  ```homeworks-list.component.html``` y poner:
+
+```
+ <div class='panel-heading'>
+     {{pageTitle}}
+ </div>
+```
+Veamos que pasa.
+
+### 6. Utilizando *ngIf para elegir hacer algo o no
+En el template, cambiamos ```<table clas="table">``` por lo siguiente:
+
+```html
+<table class='table' *ngIf='homeworks && homeworks.length'>
+```
+Esto todava no va a tener resultado hasta que en el paso siguiente agreguemos la property 'homeworks'.
+
+### 7. Utilizando *ngFor para iterar sobre elementos de forma dinamica
+
+Ahora crearemos la clase Exercise y Homeworks (en una carpeta llamada models), y agregaremos la propiedad 'homeworks' a nuestro componente.
+
+Clase Exercise en la carpeta models:
+```typescript
+export class Exercise {
+    id: string;
+    problem: string;
+    score: number;
+
+    constructor(id:string = "", problem:string = "", score:number = 0) {
+        this.id = id;
+        this.problem = problem;
+        this.score = score;
+    }
+}
+```
+Clase Homework en la carpeta models:
+```typescript
+import { Exercise } from './Exercise';
+
+export class Homework {
+    id: string;
+    description: string;
+    dueDate: Date;
+    score: number;
+    exercises: Array<Exercise>;
+
+    constructor(id:string, description:string, score:number, dueDate:Date, exercises: Array<Exercise>){
+        this.id = id;
+        this.description = description;
+        this.score = score;
+        this.dueDate = dueDate;
+        this.exercises = exercises;
+    }
+}
+```
+Nuestro componente:
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Homework } from '../models/Homework';
+import { Exercise } from '../models/Exercise';
+
+@Component({
+  selector: 'app-homeworks-list',
+  templateUrl: './homeworks-list.component.html',
+  styleUrls: ['./homeworks-list.component.css']
+})
+export class HomeworksListComponent implements OnInit {
+    pageTitle:string = "Homeworks List";
+    homeworks:Array<Homework> = [
+        new Homework("1", "Una tarea", 0, new Date(), [new Exercise("1", "Un Problema", 0)]),
+        new Homework("2", "Otra tarea", 0, new Date(), [])
+    ];
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+}
+```
+Y en el template cambiamos el ```<tbody>``` por lo siguiente:
+```html
+<tbody>
+  <tr *ngFor='let aHomework of homeworks'>
+      <td>{{aHomework.id}}</td>
+      <td>{{aHomework.description  | uppercase}}</td>
+      <td>{{aHomework.dueDate}}</td>
+      <td>{{aHomework.score}}</td>
+      <td>
+          <div>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Problem</th>
+                          <th>Score</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor='let aExercise of aHomework.exercises'>
+                          <td>{{aExercise.problem}}</td>
+                          <td>{{aExercise.score}}</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </td>
+  </tr>
+</tbody>
+```
+
+### 7. Agregando Two-Way Binding:
+En nuestro HomeworksListComponent, agregamos la property listFilter:
+```typescript
+listFilter: string;
+```
+En el template asociado, reemplazamos los dos primeros divs de class "row" que aparecen:
+```html
+<div class='row'>
+    <div class='col-md-2'>Filter by:</div>
+    <div class='col-md-4'>
+        <input type='text' [(ngModel)]='listFilter' />
+    </div>
+</div>
+<div class='row' *ngIf='listFilter'>
+    <div class='col-md-6'>
+        <h3>Filtered by: {{listFilter}} </h3>
+    </div>
+</div>
+```
+Vemos que no nos anda.
+
+Para ello vamos al ```app.module.ts``` y agregamos el import a FormsModule:
+```typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeworksListComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+Nos faltaría ver cómo agregar la condición de filtro al for (esto lo haremos la clase que viene ya que es más complejo).
+
+Esto que hicimos se llama **Two-Way Binding**.
+
+![imagen](../imgs/angular-clase2/two%20way%20data%20binding%20in%20angular%202.png)
+
+Two-Way Binding es simplemente un mecanismo a partir del cual podemos establecer un enlace entre nuestros datos (properties), y una expresión en un template; de manera que cada vez que desde la UI se modifique dicho valor, el valor de la property cambia, y viceversa.
+
+### 7. Usando Pipes en Angular
+
+Cuando los datos no están en el formato apropiado que queremos para mostrarlos, usamos Pipes. Estos permiten aplicar cierta lógica sobre las properties de nuestra clase antes de que estas sean mostradas (por ejemplo para que sean más user friendly). Angular ya provee varios Pipes built-in para diferentes tipos de datos (date, number, decimal,json, etc), e incluso permite crear pipes propios para realizar lógica particular como lo es manejar el filtrado. Esto lo haremos en la próxima clase.
+Los pipes en general se denotan con el caracter ```|``` (pipe), expresión.
+Por ahora, nos quedamos con pipes simples, como los de la imagen:
+
+![imagen](doc-images/pipes-sample.png)
+
+Para ello, simplemente cambiamos:
+```html
+<td>{{aHomework.description  | uppercase}}</td>
+... // o
+<td>{{aHomework.description  | lowercase}}</td>
+```
+
+## 8. Agregando Event Binding para los Exercises
+Usaremos **Event Binding** para mandar información al revés de los tipos de Data Binding como la Interpolación o el Property Binding. En lugar de que el las properties de nuestra clase manden datos al template (o vista), esta vez será el template o vista quien se comunicará con la clase. Esto lo hace a partir de responder a eventos del usuario, por ejemplo un click, un mouse over, un copy o paste, un scroll, un tecleo, etc.
+La información de eventos disponibles que podemos usar se encuentra bien documentada en:
+https://developer.mozilla.org/en-US/docs/Web/Events
+La idea es que nuestros componentes estén funcionando como "listeners" a las acciones del usuario, usando Event Binding, y pudiendo ejecutar cierta lógica particular.
+
+La sintaxis es por ejemplo:
+```html
+<button (click)='hacerAlgoCuandoOcurreClick()'> </button>
+```
+- El nombre del evento va entre paréntesis.
+- La lógica a ejecutar va entre comillas simples luego del igual.
+
+Lo que haremos ahora es la lógica del mostrado de imagenes con Event Binding, para ello:
+En ```homeworks-list.component.ts```, agregamos la siguiente property a la clase:
+```typescript
+showExercises:boolean = false;
+```
+A su vez agregamos la siguiente función:
+```typescript
+toggleExercises(): void {
+    this.showExercises = !this.showExercises;
+}
+```
+Quedando:
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Homework } from '../models/Homework';
+import { Exercise } from '../models/Exercise';
+
+@Component({
+  selector: 'app-homeworks-list',
+  templateUrl: './homeworks-list.component.html',
+  styleUrls: ['./homeworks-list.component.css']
+})
+export class HomeworksListComponent implements OnInit {
+    pageTitle:string = "Homeworks List";
+    listFilter:string = "";
+    showExercises:boolean = false;
+    homeworks:Array<Homework> = [
+        new Homework("1", "Una tarea", 0, new Date(), [new Exercise("1", "Un Problema", 0)]),
+        new Homework("2", "Otra tarea", 0, new Date(), [])
+    ];
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+    toggleExercises(): void {
+        this.showExercises = !this.showExercises;
+    }
+
+}
+```
+Y en el template hacemos estos dos cambios:
+1) En cada click al botón que tenemos en el header de la tabla, llamamos a la función ```toggleExercises()```:
+```html
+<button (click)='toggleExercises()'class='btn btn-primary'>
+    {{showExercises ? 'Hide' : 'Show'}} Exercises
+</button>
+```
+2) En el mostrado de los Exercises, agregamos la condición de que solo se muestre si la property lo indica.
+```html
+<div *ngIf='showExercises'> //agregamos esta linea
+    <table>
+        <thead>
+            <tr>
+                <th>Problem</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor='let aExercise of aHomework.exercises'>
+                <td>{{aExercise.problem}}</td>
+                <td>{{aExercise.score}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+```
