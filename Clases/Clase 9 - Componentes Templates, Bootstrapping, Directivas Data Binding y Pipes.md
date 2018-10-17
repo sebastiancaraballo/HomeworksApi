@@ -292,7 +292,7 @@ Este commando nos agrega el componente automaticamnte al ```app.module.ts``` den
 ### 3. Agregamos el html.
 Agregamos en nuestro archivo de vista (```homeworks-list.component.html```) nuestro template basico.
 
-![imagen](.../imgs/angular-clase2/templates-types.png)
+![imagen](../imgs/angular-clase2/templates-types.png)
 
 Particularmente utilizaremos la propiedad ```templateUrl``` luego en nuestro componente:
 ```html
