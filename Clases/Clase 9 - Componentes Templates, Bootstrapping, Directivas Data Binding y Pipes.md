@@ -8,7 +8,7 @@ Cada componente la idea es que funcione armoniosamente y en conjunto con el rest
 
 Por ejemplo, una excelente forma de pensar los componentes es a través de la siguiente imagen:
 
-![imagen](imgs/angular-clase2/angular-components-sample-2.png)
+![imagen](../imgs/angular-clase2/angular-components-sample-2.png)
 
 A su vez, es interesante recordar cómo se comporta internamente cada componente. Como habíamos dicho, los componentes se componen de tres cosas:
 
@@ -18,7 +18,7 @@ A su vez, es interesante recordar cómo se comporta internamente cada componente
 
 3) **Metadata:** Finalmente, el componente también tiene **metadata**, que es información adicional para Angular, siendo esta definida con un *decorator* (los que arrancan con **@**). Un decorador es una función que agrega metadata a una clase, sus miembros o los argumentos de sus métodos.
 
-![imagen](imgs/angular-clase2/angular_component_architecture.png)
+![imagen](../imgs/angular-clase2/angular_component_architecture.png)
 
 ### La clase de un componente:
 
