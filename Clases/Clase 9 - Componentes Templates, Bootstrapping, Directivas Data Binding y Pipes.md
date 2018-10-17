@@ -229,3 +229,140 @@ A su vez, también podemos enriquecer nuestro HTML a partir de lo que se llaman 
 Una directiva es un elemento custom del HTML que usamos para extender o mejorar nuestro HTML. Cada vez que creamos un componente y queremos renderizar su template, lo hacemos a través de su *selector* asociado, el cual define la directiva del componente.
 
 Pero a su vez angular también tiene algunas directivas built-in, sobre todo las *structural directives*. Por ejemplo: ***ngIf** o ***ngFor** (los asteriscos marcan a las directivas como que son estructurales).
+
+## Tutorial: nuestro primer Component 
+En este tutorial veremos la creación de un componente, agregarlo a nuestro módulo principal, trabajaremos con templates, data binding, interpolación y directivas.
+** Para ello haremos un listado de tareas. **
+
+### 1. Instalamos Bootstrap
+
+Instalamos la librería de Twitter Bootstrap (nos da estilos y nos permite lograr diseños responsive de forma simple).
+Para ello, parados sobre nuestro proyecto usamos npm para descargarla (recordemos que npm es como Nuget pero para librerías o módulos de JavaScript):
+
+```
+npm install bootstrap@3 --save
+```
+El --save lo que hace es guardar la referencia a este módulo en el package.json
+
+Vemos como se impacta el package.json
+```json
+"dependencies": {
+    "@angular/animations": "^6.1.0",
+    "@angular/common": "^6.1.0",
+    "@angular/compiler": "^6.1.0",
+    "@angular/core": "^6.1.0",
+    "@angular/forms": "^6.1.0",
+    "@angular/http": "^6.1.0",
+    "@angular/platform-browser": "^6.1.0",
+    "@angular/platform-browser-dynamic": "^6.1.0",
+    "@angular/router": "^6.1.0",
+    "bootstrap": "^3.3.7", //aca aparecio boostrap
+    "core-js": "^2.5.4",
+    "rxjs": "~6.2.0",
+    "zone.js": "~0.8.26"
+  },
+```
+Y en el ```angular.json``` agregamos (en projects/:NOMBRE DEL PROJECTO:/styles) para poder usarlo en nuestra aplicacion.
+```json
+"styles": [
+  "node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "src/styles.css"
+],
+```
+### 3. Creamos nuestro componente
+
+Para eso lanzaremos el siguiente commando ```ng generate component HomeworksList```
+Una carpeta llamada homeworks-list, con 4 archivos:
+- homeworks-list.component.spec.ts (Archivo con pruebas) (Se puede tanto eleminar como mover a la carpeta e2e)
+- homeworks-list.component.ts (Archivo con la clase del componente y la metadata)
+- homeworks-list.component.html (Archivo que contiene la vista)
+- homeworks-list.component.css (Archivo que contiene el css del componente)
+Este commando nos agrega el componente automaticamnte al ```app.module.ts``` dentro del array declarations
+```json
+{
+  declarations: [
+    AppComponent,
+    HomeworksListComponent,
+    HomeworksFilterPipe,
+    
+  ],
+....
+```
+
+### 3. Agregamos el html.
+Agregamos en nuestro archivo de vista (```homeworks-list.component.html```) nuestro template basico.
+
+![imagen](.../imgs/angular-clase2/templates-types.png)
+
+Particularmente utilizaremos la propiedad ```templateUrl``` luego en nuestro componente:
+```html
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Homeworks List
+    </div>
+
+    <div class='panel-body'>
+        <!-- Aca filtramos las tareas  -->
+        <!-- Selector de filtro:  -->
+        <div class='row'>
+            <div class='col-md-2'>Filter by:</div>
+            <div class='col-md-4'>
+                <input type='text' />
+            </div>
+        </div>
+        <!-- Muestra filtro:  -->
+        <div class='row'>
+            <div class='col-md-6'>
+                <h3>Filtered by: </h3>
+            </div>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div class='has-error'> </div>
+
+        <!--Tabla de tareas -->
+        <div class='table-responsive'>
+            <table class='table'>
+                <!--Cabezal de la tabla -->
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Description</th>
+                        <th>DueDate</th>
+                        <th>Score</th>
+                        <th>
+                            <button class='btn btn-primary'>
+                               Show Exercises
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <!--Cuerpo de la tabla-->
+                <tbody>
+                    <!-- Aca va todo el contenido de la tabla  -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+```
+### 4. El código del componente
+
+Modificamos el archivo ```homeworks-list.component.ts``` y le agregamos el siguiente código:
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-homeworks-list',
+  templateUrl: './homeworks-list.component.html',
+  styleUrls: ['./homeworks-list.component.css']
+})
+export class HomeworksListComponent implements OnInit {
+    pageTitle:string = "Homeworks List"
+    
+    constructor() { }
+
+    ngOnInit() {
+    }
+}
+```
