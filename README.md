@@ -12,6 +12,7 @@
 * [Clase 7 - Deployment en IIS](/Clases/Clase%207%20-%20Deployment%20en%20IIS.md)
 ## 2) Angular
 * [Clase 8 - Angular y las SPAs](/Clases/Clase%208%20-%20Angular%20y%20las%20SPAs.md)
+* [Clase 9 - Componentes, Templates, Bootstrapping, Directivas, Data Binding y Pipes](/Clases/Clase%209%20-%20Componentes%20Templates%2C%20Bootstrapping%2C%20Directivas%20Data%20Binding%20y%20Pipes.md)
 
 ## Aclaracion
 El código que se encuentra está escrito en un ámbito de clase, es incompleto y seguramente con errores. Tomar con cuidado.
