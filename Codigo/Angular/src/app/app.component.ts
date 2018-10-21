@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'a';
+  title:string = 'HomeworksAngular';
+  name:string = 'Santiago Mendez';
+  email:string = 'santi17mendez@hotmail.com';
+  address = {
+    street: "la direccion del profe",
+    city: "Montevideo",
+    number: 1234
+  };
 }
+
