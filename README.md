@@ -14,6 +14,7 @@
 * [Clase 8 - Angular y las SPAs](/Clases/Clase%208%20-%20Angular%20y%20las%20SPAs.md)
 * [Clase 9 - Componentes, Templates, Bootstrapping, Directivas, Data Binding y Pipes](/Clases/Clase%209%20-%20Componentes%20Templates%2C%20Bootstrapping%2C%20Directivas%20Data%20Binding%20y%20Pipes.md)
 * [Clase 9.5 - Custom Pipes y Service Basico](/Clases/Clase%209.5%20-%20Custom%20Pipes%20y%20Service%20Basico.md)
+* [Clase 10 - Conceptos avanzados](/Clases/Clase%2010%20-%20Conceptos%20avanzados.md)
 
 ## Aclaracion
 El código que se encuentra está escrito en un ámbito de clase, es incompleto y seguramente con errores. Tomar con cuidado.
