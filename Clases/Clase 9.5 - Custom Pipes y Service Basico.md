@@ -220,7 +220,7 @@ constructor(private _serviceHomeworks:HomeworksService) {
 }
 ``` 
 
-Eso el HomeworksService y lo deja disponible para la clase. Ahí mismo podríamos inicializar nuestras pets, llamando al ```getHomeworks``` del servicio, sin embargo, no es proljo mezclar la lógica de construcción del componente (todo lo que es renderización de la vista), con lo que es la lógica de obtención de datos. Para resover esto usarmoes Hooks particularmente, el ```OnInit``` que se ejecuta luego de inicializar el componente.
+Eso el HomeworksService y lo deja disponible para la clase. Ahí mismo podríamos inicializar nuestras homeworks, llamando al ```getHomeworks``` del servicio, sin embargo, no es proljo mezclar la lógica de construcción del componente (todo lo que es renderización de la vista), con lo que es la lógica de obtención de datos. Para resover esto usarmoes Hooks particularmente, el ```OnInit``` que se ejecuta luego de inicializar el componente.
 
 ```typescript
 ngOnInit(): void {
