@@ -386,7 +386,7 @@ export class HomeworkDetailGuard implements CanActivate {
     if (isNaN(id) || id < 1) {
         alert('La id de la tarea no es valida');
         // redirigimos (a traves de una navegacion), a /homeworks
-        this._router.navigate(['/pets']);
+        this._router.navigate(['/homeworks']);
         // abortamos la navegacion actual
         return false;
     };
@@ -450,8 +450,8 @@ export class AppModule { }
 
 Ver la URL y ver como se valida. Si pongo una id con letras:
 
-![imagen](../imgs/angular-clase4/guard1.png)
+![imagen](../imgs/angular-clase4/guard1.PNG)
 
 Si pongo de id un número negativo:
 
-![imagen](../imgs/angular-clase4/guard2.png)
+![imagen](../imgs/angular-clase4/guard2.PNG)
