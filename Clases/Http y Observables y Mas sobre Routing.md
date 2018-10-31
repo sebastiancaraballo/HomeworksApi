@@ -215,3 +215,243 @@ private result(data: Array<Homework>):void {
   console.log(this.homeworks);
 }
 ```    
+## Conceptos avanzados de Routing
+
+La otra clase habíamos visto los aspectos básicos de Routing. Ahora veremos algunas técnicas adicionales para manipular las rutas.
+
+Por ahora solo podemos navegar a ciertas rutas y mostrar vistas, pero ese es un escenario muy básico. Por ejemplo cómo hacemos para pasar parámetros a una ruta? O cómo hacemos para activar rutas a través de código? O cómo hacemos para proteger rutas y permitir que solo ciertos usuarios o dadas ciertas condiciones dichas rutas sean visibles?
+
+### Pasando parámetros a nuestras rutas
+
+Pasar parámetros para las rutas. Veamos el ejemplo si quisiéramos ver el detalle de las tareas:
+
+#### 0. Creamos un HomeworkDetailComponent:
+
+```homework-detail.component.html```:
+```html
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        {{pageTitle}}
+    </div>
+</div>
+```
+
+```homework-detail.component.ts```:
+```typescrip
+timport { Component, OnInit } from '@angular/core';
+import { Homework } from '../models/Homework';
+
+@Component({
+  selector: 'app-homework-detail',
+  templateUrl: './homework-detail.component.html',
+  styleUrls: ['./homework-detail.component.css']
+})
+export class HomeworkDetailComponent implements OnInit {
+  pageTitle : string = 'Homework Detail';
+  homework : Homework;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+}
+```
+
+Y a su vez agregamos este componente en el AppModule, primero haciendo el import y luego agregando ```HomeworkDetailComponent``` en el array de declarations:
+
+```typescript
+import { HomeworkDetailComponent } from './homework-detail/homework-detail.component';
+```
+
+```typescript
+declarations: [
+  AppComponent,
+  HomeworksListComponent,
+  HomeworksFilterPipe,
+  StarComponent,
+  WelcomeComponent,
+  HomeworkDetailComponent
+],
+```  
+
+#### 1. Seteamos el path en app.module.ts (AppModule)
+
+En este caso el path sería: *homeworks/id*, indicando que ruta a un componente **HomeworkDetailComponent**. A su vez, le pasamos el parámetro id, con una barra y un dos puntos adelante (/:id). Si quisiéramos más parámetros, repetimos esto.
+
+```typescript
+   { path: 'homeworks/:id', component: HomeworkDetailComponent },
+```
+
+#### 2. Ruteamos al path 
+
+En el HTML de nuestro ***HomeworkDetailComponent***,  ponemos un link (ancla) sobre el nombre, de manera de que cada vez que se haga click sobre el mismo, dicha ruta se resuelva y se le pase el parámetro asociado.
+
+```html
+  <td><a [routerLink]="['/homeworks', aHomework.id]"> {{aHomework.id | uppercase}} </a></td>
+```
+
+#### 3. Leemos los parámetros de la ruta n el HomeworkDetailComponent
+
+Leemos los parámetros de la ruta, usando el service ActivatedRoute de ‘@angular/router’.
+
+Lo inyectamos en nuestro componente para que use este servicio (el provider ya viene resuelto por el RouterModule que usamos la clase anterior):
+
+```typescript
+constructor(private _currentRoute: ActivatedRoute) {  }
+```
+
+3. Agarramos el parámetro de la ruta y lo ponemos en una variable privada, dicha lógica lo haremos en el OnInit (hay que implementar OnInit).
+
+```typescript
+ngOnInit() : void {
+	// let (es parte de ES2015) y define una variable que vive en este scope
+	// usamos el nombre del parámetro que uamos en la configuración de la ruta y lo obtenemos
+	let id =+ this._currentRoute.snapshot.params['id'];
+	// definimos el string con interpolacion 
+	this.pageTitle +=  `: ${id}`;
+}
+```
+
+![imagen](../imgs/angular-clase4/pet-detail-with-id.png)
+
+### Routing a través de código
+
+Haremos Routing en código en lugar de hacerlo con la directiva **RouterLink** que hemos venido usando en el template.
+
+Por ejemplo: un botón de Save que tiene que ejecutar cierto código una vez que se llenen campos, y recién ahí rutear (si todo salió satisfactoriamente). Para routear con código, usaremos el Router Service.
+
+Recordemos, cada vez que inyectemos un servicio en una clase, tenemos que preguntarnos “registramos este servicio en el Angular Injector?”. En este caso, el provider ya viene dad por el RouterModule, por lo que no tenemos que hacerlo
+
+#### 1. Importamos el Router Service (HomeworkDetailComponent)
+
+En HomeworkDetailComponent:
+
+```typescript
+import { ActivatedRoute, Router } from '@angular/router';
+```
+
+#### 2. Inyectamos el servicio en la clase a través del constructor:
+
+```typescript
+    constructor(private _currentRoute: ActivatedRoute, private _router : Router) {  }
+```
+
+#### 3. Creamos una función que rutee a cierto path:
+
+```typescript
+  onBack(): void {
+       this._router.navigate(['/homeworks']); //En caso de que necesite parametros los paso como otros argumentos
+  }
+```
+
+#### 4. En el template de HomeworkDetail (HTML), creamos un botón para ir para atrás:
+
+```html
+<div class='panel-footer'>
+	<a class='btn btn-default' (click)="onBack()" style="width:80px">
+	    <i class='glyphicon glyphicon-chevron-left' ></i> Back
+	</a>
+</div>
+```
+
+## Protegiendo las rutas con guardas
+
+Hay situaciones en las que queremos limitar el acceso a nuestras rutas; hacerlas que sean accesibles solo a ciertos usuarios (un Admin) o bajo ciertas condiciones. Para ello usamos **guardas**, el *Angular Router* provee varias guardas para llevar a cabo estas operaciones. Algunas de estas **route guards** son:
+
+- ```CanActivate```: Guarda para navegar A una ruta
+- ```CanDeactivate```: Guarda para navegar DESDE una ruta
+- ```Resolve```: Para obtener datos antes de navegar a una cierta ruta (antes de activarla)
+- ```CanLoad```: Para validar el routing asíncrono
+
+Lo que haremos es construir una guarda que nos deje entrar el ```HomeworkDetailComponent``` a menos que una cierta condición se cumpla. Las guardas se implementan como servicios, por lo que deben ser ```@Injectable()```. A diferencia de los otros servicios que hemos usados, los servicios de guardas deben ser provistos (puestos en el providers array del AppModule).
+
+#### 1) Haremos algo muy simple, una guarda que prevenga la navegación al componente de detalle si la id que pasamos no es un número o es menor que cero.
+
+Creamos entonces ```homework-detail-guard.service.ts```.
+Con el siguiente commando ```ng generate guard HomeworkDetail```
+
+Le ponemos el siguiente cdigo:
+
+```typescript
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
+
+@Injectable()
+export class HomeworkDetailGuard implements CanActivate {
+
+  constructor(private _router: Router) { }
+
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    let id = +route.url[1].path;
+    if (isNaN(id) || id < 1) {
+        alert('La id de la tarea no es valida');
+        // redirigimos (a traves de una navegacion), a /homeworks
+        this._router.navigate(['/pets']);
+        // abortamos la navegacion actual
+        return false;
+    };
+    return true;
+  }
+}
+```
+
+#### 2) Vamos al AppModule y registramos el servicio en el providers array (luego de importarlo)
+
+Quedando, todo ```app.module.ts```, así:
+
+```typescript
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
+import { AppComponent } from './app.component';
+import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
+import { HomeworksFilterPipe } from './homeworks-list/homeworks-filter.pipe';
+import { HomeworksService } from './services/homeworks.service';
+import { StarComponent } from './star/star.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { HttpModule } from '@angular/http';
+import { HomeworkDetailComponent } from './homework-detail/homework-detail.component';
+import { HomeworkDetailGuard } from './homework-detail.guard';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeworksListComponent,
+    HomeworksFilterPipe,
+    StarComponent,
+    WelcomeComponent,
+    HomeworkDetailComponent
+  ],
+  imports: [
+    HttpModule,
+    FormsModule,
+    BrowserModule,
+    RouterModule.forRoot([
+        { path: 'homeworks', component: HomeworksListComponent },
+        { path: 'homeworks/:id', 
+          component: HomeworkDetailComponent,
+          canActivate: [HomeworkDetailGuard]
+        },
+        { path: 'welcome', component:  WelcomeComponent }, 
+        { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+        { path: '**', redirectTo: 'welcome', pathMatch: 'full'}
+    ])
+  ],
+  providers: [
+    HomeworksService,
+    HomeworkDetailGuard
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+Ver la URL y ver como se valida. Si pongo una id con letras:
+
+![imagen](../imgs/angular-clase4/guard1.png)
+
+Si pongo de id un número negativo:
+
+![imagen](../imgs/angular-clase4/guard2.png)
