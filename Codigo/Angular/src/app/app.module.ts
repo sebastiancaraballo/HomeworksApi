@@ -9,6 +9,7 @@ import { HomeworksFilterPipe } from './homeworks-list/homeworks-filter.pipe';
 import { HomeworksService } from './services/homeworks.service';
 import { StarComponent } from './star/star.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     WelcomeComponent
   ],
   imports: [
+    HttpModule,
     FormsModule,
     BrowserModule,
     RouterModule.forRoot([

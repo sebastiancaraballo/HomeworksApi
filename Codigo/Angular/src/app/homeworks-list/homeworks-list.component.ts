@@ -18,7 +18,15 @@ export class HomeworksListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.homeworks = this._serviceHomeworks.getHomeworks();
+    this._serviceHomeworks.getHomeworks().subscribe(
+        ((data : Array<Homework>) => this.result(data)),
+        ((error : any) => console.log(error))
+    )
+  }
+
+  private result(data: Array<Homework>):void {
+    this.homeworks = data;
+    console.log(this.homeworks);
   }
 
   toogleExercises() {
