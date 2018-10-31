@@ -1,4 +1,4 @@
-# Angular: Http y Observables y Más sobre Routing
+# Http y Observables y Más sobre Routing
 
 ## Interactuando con una API REST a través de HTTP. Observables 
 
