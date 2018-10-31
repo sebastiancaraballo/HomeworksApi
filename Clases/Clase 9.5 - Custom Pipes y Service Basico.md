@@ -1,7 +1,7 @@
 # Custom Pipes y Service Basico
 (Se dio en la clase 9 pero estaba planeado para la 10 :( )
 
-## Custom Pipes: Filtrado en el listado de mascotas
+## Custom Pipes: Filtrado en el listado de tareas
 
 Como vimos la clase anterior (Clase 9), Angular provee un conjunto de Pipes que ya vienen integrados y que sirven para transformar los datos de nuestras bound properties antes de mostrarlos en el template (HTML). Ahora veremos como construir nuestros propios, Pipes personalizados, o *Custom Pipes*. 
 
