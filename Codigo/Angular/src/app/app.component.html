@@ -1,12 +1,14 @@
-<div style="text-align:center">
-  <h1>Bienvenidos a {{ title }}</h1>
-  <h2>Curso de DA2 de {{ name }}</h2>
-  <h3>Email: {{email}} </h3>
-  <p>
-    <strong>Direccion:</strong> {{address.street}}
-     {{address.number}} de la ciudad {{ address.city }}
-  </p>
-</div>
-<app-homeworks-list>
-
-</app-homeworks-list>
+<div>
+    <nav class='navbar navbar-default'>
+        <div class='container-fluid'>
+            <a class='navbar-brand'>{{pageTitle}}</a>
+            <ul class='nav navbar-nav'>
+                <li><a [routerLink]="['/welcome']">Home</a></li>
+                <li><a [routerLink]="['/homeworks']">Homeworks List</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class='container'>
+        <router-outlet></router-outlet>
+    </div>
+ </div>
