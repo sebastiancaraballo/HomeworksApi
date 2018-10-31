@@ -34,7 +34,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let aHomework of homeworks | homeworksFilter : listFilter">
-            <td>{{aHomework.id}}</td>
+            <td><a [routerLink]="['/homeworks', aHomework.id]"> {{aHomework.id | uppercase}} </a></td>
             <td>{{aHomework.description | uppercase}}</td>
             <td>{{aHomework.dueDate}}</td>
             <td>{{aHomework.score}}</td>

@@ -10,6 +10,8 @@ import { HomeworksService } from './services/homeworks.service';
 import { StarComponent } from './star/star.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { HttpModule } from '@angular/http';
+import { HomeworkDetailComponent } from './homework-detail/homework-detail.component';
+import { HomeworkDetailGuard } from './homework-detail.guard';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { HttpModule } from '@angular/http';
     HomeworksListComponent,
     HomeworksFilterPipe,
     StarComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    HomeworkDetailComponent
   ],
   imports: [
     HttpModule,
@@ -25,14 +28,18 @@ import { HttpModule } from '@angular/http';
     BrowserModule,
     RouterModule.forRoot([
         { path: 'homeworks', component: HomeworksListComponent },
-        { path: 'homeworks/:id', component: HomeworksListComponent }, // esto sería otro componente! por ejemplo uno que muestre el detalle de las tareas
+        { path: 'homeworks/:id', 
+          component: HomeworkDetailComponent,
+          canActivate: [HomeworkDetailGuard]
+        },
         { path: 'welcome', component:  WelcomeComponent }, 
-        { path: '', redirectTo: 'welcome', pathMatch: 'full' }, // configuramos la URL por defecto
-        { path: '**', redirectTo: 'welcome', pathMatch: 'full'} //cualquier otra ruta que no matchee, va a ir al WelcomeComponent, aca podría ir una pagina de error tipo 404 Not Found
+        { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+        { path: '**', redirectTo: 'welcome', pathMatch: 'full'}
     ])
   ],
   providers: [
-    HomeworksService
+    HomeworksService,
+    HomeworkDetailGuard
   ],
   bootstrap: [AppComponent]
 })
