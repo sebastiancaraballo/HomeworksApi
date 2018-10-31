@@ -41,7 +41,7 @@ Tanto Observables como Promises sirven para lo mismo, pero los Observables permi
 
 ### Tutorial: Consumiendo nuestra API
 
-Como ya hemos vistos, los servicios de Angular son una excelente forma de encapsular lógica como la obtención de datos de un web service / backend, para que cualquier otro componente o service que lo precise lo use, a través de inyección de dependencias. En la clase anterior hicimos eso, pero manteniendo una lista hardcodeada de mascotas. En su lugar, queremos enviar una solicitud HTTP para obtener las tareas. 
+Como ya hemos vistos, los servicios de Angular son una excelente forma de encapsular lógica como la obtención de datos de un web service / backend, para que cualquier otro componente o service que lo precise lo use, a través de inyección de dependencias. En la clase anterior hicimos eso, pero manteniendo una lista hardcodeada de tareas. En su lugar, queremos enviar una solicitud HTTP para obtener las tareas. 
 
 Así tenemos ahora las tareas:
 
@@ -86,7 +86,7 @@ Es importante notar que las llamadas HTTP son operaciones asincrónicas únicas,
 import { Http, Response } from ‘@angular/http’;
 ```
 
-Y ahora veamos esto, ¿realmente queremos "observar" Response enteras HTTP? A nosotros simplemente nos interesa obtener mascotas, no Responses. No queremos "observar" objetos del tipo Response.
+Y ahora veamos esto, ¿realmente queremos "observar" Response enteras HTTP? A nosotros simplemente nos interesa obtener tareas, no Responses. No queremos "observar" objetos del tipo Response.
 
 Para cargar el operador map, tenemos que cargarlo usando import:
 
