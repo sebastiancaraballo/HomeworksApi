@@ -312,7 +312,7 @@ ngOnInit() : void {
 }
 ```
 
-![imagen](../imgs/angular-clase4/pet-detail-with-id.png)
+![imagen](../imgs/angular-clase4/pet-detail-with-id.PNG)
 
 ### Routing a través de código
 
