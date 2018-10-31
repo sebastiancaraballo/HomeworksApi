@@ -326,7 +326,7 @@ Luego hacemos el binding del evento en el template del evento:
 Y ahora volvemos al StarComponent y agregamos la funcion onClick que acabamos de declarar en nuestro template:
 ```typescript
 onClick(): void {
-    this.ratingClicked.emit(`El puntaje ${this.rating} fue clickeado!`);
+    this.ratingClicked.emit(`El raiting es ${this.rating}!`);
 }
 ```
 Finalmente, lo que haremos es agregar es la referencia al evento en el template:
