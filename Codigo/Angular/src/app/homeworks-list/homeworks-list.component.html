@@ -24,6 +24,7 @@
             <th>Descripcion</th>
             <th>Fecha</th>
             <th>Puntaje</th>
+            <th>Rating</th>
             <th>
               <button (click)="toogleExercises()" class='btn btn-primary'>
                 {{showExercises ? 'Mostrar' : 'Ocultar'}} EJs
@@ -37,6 +38,11 @@
             <td>{{aHomework.description | uppercase}}</td>
             <td>{{aHomework.dueDate}}</td>
             <td>{{aHomework.score}}</td>
+            <td> 
+                <app-star [rating]='aHomework.rating'
+                    (ratingClicked)='onRatingClicked($event)'>
+                </app-star>
+            </td>
             <td>
               <div *ngIf='showExercises'>
                 <table *ngIf='aHomework.exercises && aHomework.exercises.length'>

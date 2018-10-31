@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Homework } from '../models/Homework';
-import { Exercise } from '../models/Exercise';
 import { HomeworksService } from '../services/homeworks.service';
 
 @Component({
@@ -24,5 +23,9 @@ export class HomeworksListComponent implements OnInit {
 
   toogleExercises() {
     this.showExercises = !this.showExercises;
+  }
+
+  onRatingClicked(message:string):void {
+    this.pageTitle = 'HomeworksList ' + message;
   }
 }

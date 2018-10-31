@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
 import { HomeworksFilterPipe } from './homeworks-list/homeworks-filter.pipe';
 import { HomeworksService } from './services/homeworks.service';
+import { StarComponent } from './star/star.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeworksListComponent,
-    HomeworksFilterPipe
+    HomeworksFilterPipe,
+    StarComponent
   ],
   imports: [
     FormsModule,

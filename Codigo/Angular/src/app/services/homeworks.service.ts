@@ -9,11 +9,13 @@ export class HomeworksService {
 
   getHomeworks():Array<Homework> {
     return [
-      new Homework('1', 'Una tarea', 0, new Date(), [
+      new Homework('1', 'Una tarea', 0, 
+      new Date(), 2, [
         new Exercise('1', 'Un problema', 1),
         new Exercise('2', 'otro problema', 10)
       ]),
-      new Homework('2', 'Otra tarea', 0, new Date(), [])
+      new Homework('2', 'Otra tarea', 0, 
+        new Date(), 4, [])
     ];
   }
 }
