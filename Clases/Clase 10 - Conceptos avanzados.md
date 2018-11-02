@@ -69,9 +69,7 @@ Sin embargo, hay una opción más prolija y reusable: **agregar estilos únicos 
 
 ![image](../imgs/angular-clase3/1.png)
 
-Siguiendo con nuestro ejemplo, le agregaremos estilos a nuestro ```HomeworksListComponent```. Lo primero que haremos es ver los estilos actuales de nuestra lista:
-
-![image](../imgs/angular-clase3/2.png)
+Siguiendo con nuestro ejemplo, le agregaremos estilos a nuestro ```HomeworksListComponent```.
 
 1) Ahora dentro de la carpeta ```app/homeworks-list``` creamos un nuevo archivo ```homeworks-list.component.css```.
 
