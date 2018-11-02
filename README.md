@@ -17,7 +17,7 @@
 * [Clase 10 - Conceptos avanzados](/Clases/Clase%2010%20-%20Conceptos%20avanzados.md)
 * [Clase 10 - Http, Observables y Mas sobre Routing](/Clases/Clase%2010%20-%20Http%20y%20Observables%20y%20Mas%20sobre%20Routing.md)
 
-## Aclaracion
+## Aclaracion ⚠️
 El código que se encuentra está escrito en un ámbito de clase, es incompleto y seguramente con errores. Tomar con cuidado.
 
 ## Contacto
