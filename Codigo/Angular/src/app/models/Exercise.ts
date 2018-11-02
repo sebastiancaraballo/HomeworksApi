@@ -1,5 +1,6 @@
+import { IExercise } from "./IExercise";
 
-export class Exercise {
+export class Exercise implements IExercise{
     id:string;
     problem:string;
     score:number;
