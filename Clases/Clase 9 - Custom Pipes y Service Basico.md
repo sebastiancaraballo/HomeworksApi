@@ -1,5 +1,4 @@
 # Custom Pipes y Service Basico
-(Se dio en la clase 9 pero estaba planeado para la 10 😓)
 
 ## Custom Pipes: Filtrado en el listado de tareas
 
