@@ -162,7 +162,7 @@ Dentro de ```star.component.ts```, pegamos el siguiente código:
 import { Component, OnChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-start',
+  selector: 'app-star',
   templateUrl: './star.component.html',
   styleUrls: ['./star.component.css']
 })
@@ -223,7 +223,7 @@ import { AppComponent } from './app.component';
 import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
 import { HomeworksFilterPipe } from './homeworks-list/homeworks-filter.pipe';
 import { HomeworksService } from './services/homeworks.service';
-import { StartComponent } from './star/star.component'; //importamos el starcomponent
+import { StarComponent } from './star/star.component'; //importamos el starcomponent
 
 @NgModule({
   declarations: [
