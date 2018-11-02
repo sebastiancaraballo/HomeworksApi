@@ -1,4 +1,4 @@
-# Angular: Conceptos avanzados
+# Conceptos avanzados
 
 Seguimos con conceptos de Angular: Interfaces, Estilos especiales (CSS) para los componentes, Lifecycle Hooks, Nested Components, Routing.
 
@@ -69,9 +69,7 @@ Sin embargo, hay una opción más prolija y reusable: **agregar estilos únicos 
 
 ![image](../imgs/angular-clase3/1.png)
 
-Siguiendo con nuestro ejemplo, le agregaremos estilos a nuestro ```HomeworksListComponent```. Lo primero que haremos es ver los estilos actuales de nuestra lista:
-
-![image](../imgs/angular-clase3/2.png)
+Siguiendo con nuestro ejemplo, le agregaremos estilos a nuestro ```HomeworksListComponent```.
 
 1) Ahora dentro de la carpeta ```app/homeworks-list``` creamos un nuevo archivo ```homeworks-list.component.css```.
 
@@ -164,7 +162,7 @@ Dentro de ```star.component.ts```, pegamos el siguiente código:
 import { Component, OnChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-start',
+  selector: 'app-star',
   templateUrl: './star.component.html',
   styleUrls: ['./star.component.css']
 })
@@ -225,7 +223,7 @@ import { AppComponent } from './app.component';
 import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
 import { HomeworksFilterPipe } from './homeworks-list/homeworks-filter.pipe';
 import { HomeworksService } from './services/homeworks.service';
-import { StartComponent } from './star/star.component'; //importamos el starcomponent
+import { StarComponent } from './star/star.component'; //importamos el starcomponent
 
 @NgModule({
   declarations: [

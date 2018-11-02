@@ -237,8 +237,8 @@ Pasar parámetros para las rutas. Veamos el ejemplo si quisiéramos ver el detal
 ```
 
 ```homework-detail.component.ts```:
-```typescrip
-timport { Component, OnInit } from '@angular/core';
+```typescript
+import { Component, OnInit } from '@angular/core';
 import { Homework } from '../models/Homework';
 
 @Component({
