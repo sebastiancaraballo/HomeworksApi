@@ -1,4 +1,4 @@
-# Angular: Conceptos avanzados
+# Conceptos avanzados
 
 Seguimos con conceptos de Angular: Interfaces, Estilos especiales (CSS) para los componentes, Lifecycle Hooks, Nested Components, Routing.
 
