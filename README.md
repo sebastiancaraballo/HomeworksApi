@@ -8,7 +8,7 @@
 * [Clase 4 - Filters](/Clases/Clase%204%20-%20Filters.md)
 * [Clase 4 - Postman](/Clases/Clase%204%20-%20Postman.pdf)
 * [Clase 5 - Mocking](/Clases/Clase%205%20-%20Mocking.md)
-* [Clase 6 - Reflection](/Clases/Clase%206%20-%20Reflection.md)
+* [Clase 6 - Reflection y Inyección de Dependencias](/Clases/Clase%206%20-%20Reflection.md)
 * [Clase 7 - Deployment en IIS](/Clases/Clase%207%20-%20Deployment%20en%20IIS.md)
 ## 2) Angular
 * [Clase 8 - Angular y las SPAs](/Clases/Clase%208%20-%20Angular%20y%20las%20SPAs.md)
