@@ -5,11 +5,7 @@ import { Headers } from "@angular/http";
   providedIn: 'root'
 })
 export class SessionService {
-    constructor() {
-        if (this.isLoggedIn()) {
-            localStorage.setItem('isLoggedIn', 'false');
-        }
-    }
+    constructor() { }
 
     logIn(token:string):void {
         localStorage.setItem('isLoggedIn', 'true');
@@ -30,9 +26,10 @@ export class SessionService {
     }
 
     addTokenToHeaders(headers:Headers):Headers {
-        if (localStorage['token']) {
-            headers.append('x-auth-token', localStorage['token']);
+        if (localStorage.getItem('token')) {
+            headers.append('Authorization', localStorage.getItem('token'));
         }
         return headers;
     }
 }
+

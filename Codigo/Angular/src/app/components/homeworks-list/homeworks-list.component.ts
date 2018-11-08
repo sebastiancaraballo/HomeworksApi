@@ -9,7 +9,7 @@ import { HomeworksService } from '../../services/homeworks.service';
 })
 export class HomeworksListComponent implements OnInit {
   pageTitle:string = 'HomeworksList';
-  homeworks:Array<Homework>;
+  homeworks:Array<Homework> = [];
   showExercises:boolean = false;
   listFilter:string = "";
 
@@ -26,7 +26,6 @@ export class HomeworksListComponent implements OnInit {
 
   private result(data: Array<Homework>):void {
     this.homeworks = data;
-    console.log(this.homeworks);
   }
 
   toogleExercises() {

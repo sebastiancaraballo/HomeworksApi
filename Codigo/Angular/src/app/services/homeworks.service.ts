@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class HomeworksService {
 
-  private WEB_API_URL : string = environment.backend + 'api/Homeworks'
+  private WEB_API_URL : string = environment.backend + 'Homeworks'
   //private WEB_API_URL : string = '../../assets/getResponse.json';
 
   constructor(private _httpService: Http, private _sessionService: SessionService) {  }
@@ -19,7 +19,7 @@ export class HomeworksService {
     myHeaders.append('Accept', 'application/json');
     this._sessionService.addTokenToHeaders(myHeaders);
     const requestOptions = new RequestOptions({headers: myHeaders});
-    
+    console.log(myHeaders);
     return this._httpService.get(this.WEB_API_URL, requestOptions)
         .pipe(
             map((response : Response) => <Array<Homework>> response.json()),
@@ -29,8 +29,8 @@ export class HomeworksService {
   }
 
   private handleError(error: Response) {
-    console.error(error);
-    return throwError(error.json().error|| 'Server error');
+    console.log(error);
+    return throwError(error);
   }
 }
 

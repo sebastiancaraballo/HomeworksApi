@@ -6,7 +6,7 @@ using Homeworks.WebApi.Filters;
 
 namespace Homeworks.WebApi.Controllers
 {
-    //[ProtectFilter("Admin")] # PARA LA SEGUNDA PARTE DEL CURSO
+    [ProtectFilter("Admin")] // PARA LA SEGUNDA PARTE DEL CURSO
     [Route("api/[controller]")]
     public class HomeworksController : Controller
     {
