@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Homework } from '../models/Homework';
+import { Homework } from '../../models/Homework';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

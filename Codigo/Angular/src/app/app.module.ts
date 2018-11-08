@@ -4,14 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { HomeworksListComponent } from './homeworks-list/homeworks-list.component';
-import { HomeworksFilterPipe } from './homeworks-list/homeworks-filter.pipe';
+import { HomeworksListComponent } from './components/homeworks-list/homeworks-list.component';
+import { HomeworksFilterPipe } from './components/homeworks-list/homeworks-filter.pipe';
 import { HomeworksService } from './services/homeworks.service';
-import { StarComponent } from './star/star.component';
-import { WelcomeComponent } from './welcome/welcome.component';
+import { StarComponent } from './components/star/star.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HttpModule } from '@angular/http';
-import { HomeworkDetailComponent } from './homework-detail/homework-detail.component';
-import { HomeworkDetailGuard } from './homework-detail.guard';
+import { HomeworkDetailComponent } from './components/homework-detail/homework-detail.component';
+import { HomeworkDetailGuard } from './shared/homework-detail.guard';
 
 @NgModule({
   declarations: [

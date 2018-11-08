@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Homework } from '../models/Homework';
+import { Homework } from '../../models/Homework';
 
 @Pipe({
   name: 'homeworksFilter'
